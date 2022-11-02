@@ -9,7 +9,7 @@ Nest transaction help you easily work with `transaction` more than ever!
 
 ## Installation 🤖
 ```ts
-npm install @hodford/nestjs-transaction --save-dev
+npm install @hodfords/nestjs-transaction --save-dev
 ```
 
 ## Usage ⚡

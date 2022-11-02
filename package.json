@@ -1,5 +1,5 @@
 {
-  "name": "@hodford/nestjs-transaction",
+  "name": "@hodfords/nestjs-transaction",
   "version": "1.0.7",
   "description": "",
   "main": ".eslintrc.js",
@@ -17,9 +17,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hodford/nestjs-command/issues"
+    "url": "https://github.com/hodfords-community/nestjs-transaction/issues"
   },
-  "homepage": "https://github.com/hodford/nestjs-command#readme",
+  "homepage": "https://github.com/hodfords-community/nestjs-transaction#readme",
   "dependencies": {},
   "devDependencies": {
     "typeorm": "^0.2.37",
