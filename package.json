@@ -1,8 +1,8 @@
 {
   "name": "@hodfords/nestjs-transaction",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "",
-  "main": ".eslintrc.js",
+  "main": "index.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
