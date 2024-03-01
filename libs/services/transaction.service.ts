@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PARAMTYPES_METADATA } from '@nestjs/common/constants';
+import { PARAMTYPES_METADATA, SELF_DECLARED_DEPS_METADATA } from '@nestjs/common/constants';
 import { ModuleRef } from '@nestjs/core';
 import { isString } from 'lodash';
 import { EntityManager, Repository } from 'typeorm';
@@ -41,7 +41,7 @@ export class TransactionService {
         cache: Map<string, any>
     ) {
         let tmpParam = (param as ForwardRef).forwardRef();
-        tmpParam = TransactionService.moduleRef.get(tmpParam, { strict: false }).constructor;
+        tmpParam = this.getOverrideProvider(tmpParam);
         const id = this.refId(instanceHost);
         if (cache.has(this.refId(tmpParam))) {
             return cache.get(this.refId(tmpParam));
@@ -90,14 +90,28 @@ export class TransactionService {
         if (cache.has(id)) {
             return cache.get(id);
         }
-        const canBeRepository = id.includes('Repository');
+
+        const canBeRepository = id.includes('Repository') || this.hasRepositoryProperties(param);
         if (isString(tmpParam) || canBeRepository) {
             argument = this.getRepositoryArgument(canBeRepository, tmpParam, manager);
         } else {
+            tmpParam = this.getOverrideProvider(tmpParam);
             argument = this.findArgumentsForProvider(tmpParam as ClassType, manager, excluded, cache);
         }
         cache.set(id, argument);
         return argument;
+    }
+
+    private hasRepositoryProperties(param: ProviderParam): boolean {
+        return (
+            typeof param === 'function' &&
+            Object.keys(new param()).includes('target') &&
+            Object.keys(new param()).includes('manager')
+        );
+    }
+
+    private getOverrideProvider(param: string | ClassType) {
+        return TransactionService.moduleRef.get(param, { strict: false }).constructor;
     }
 
     private getRepositoryArgument(canBeRepository: boolean, tmpParam: string | ClassType, manager: EntityManager) {
@@ -108,7 +122,8 @@ export class TransactionService {
                 tmpParam = isString(tmpParam)
                     ? TransactionService.moduleRef.get(tmpParam, { strict: false })
                     : tmpParam;
-                dependency = manager.getCustomRepository(tmpParam as any);
+                const repository = TransactionService.moduleRef.get(tmpParam, { strict: false });
+                dependency = manager.withRepository(repository);
                 isCustomRepository = true;
             }
         } catch (error) {
@@ -133,15 +148,23 @@ export class TransactionService {
     ) {
         const args: any[] = [];
         const keys = Reflect.getMetadataKeys(constructor);
-        for (let key of keys) {
-            if (key === PARAMTYPES_METADATA) {
-                const paramTypes: Array<string | ClassType> = Reflect.getMetadata(key, constructor);
-                for (const param of paramTypes) {
-                    const argument = this.getArgument(param, manager, excluded, constructor, cache);
-                    args.push(argument);
-                }
+
+        if (keys.includes(PARAMTYPES_METADATA)) {
+            const paramTypes: Array<string | ClassType> = Reflect.getMetadata(PARAMTYPES_METADATA, constructor);
+
+            // In case using decorator @Inject, PARAMTYPES_METADATA return undefined metadata
+            // We have to use SELF_DECLARED_DEPS_METADATA instead
+            const selfParams = Reflect.getMetadata(SELF_DECLARED_DEPS_METADATA, constructor) || [];
+            for (const { index, param } of selfParams) {
+                paramTypes[index] = param;
+            }
+
+            for (const param of paramTypes) {
+                const argument = this.getArgument(param, manager, excluded, constructor, cache);
+                args.push(argument);
             }
         }
+
         const cachedInstance = cache.get(this.refId(constructor));
         const resolvedInstance = new constructor(...args);
         if (cachedInstance) {

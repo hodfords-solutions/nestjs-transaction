@@ -5,27 +5,31 @@
 # nestjs-transaction
 
 ## Description
+
 Nest transaction help you easily work with `transaction` more than ever!
 
 ## Installation 🤖
+
 ```ts
 npm install @hodfords/nestjs-transaction --save-dev
 ```
 
 ## Usage ⚡
-You need to extend the `TransactionService` imported from library in your `Service` first
-and then call your service with this `withTransaction` method in the callback of transaction you are using.
+
+You need to extend the `TransactionService` imported from library in your `Service` first and then call your service
+with this `withTransaction` method in the callback of transaction you are using.
 
 Code demo:
+
 ```typescript
 // your-service.service.ts
 @Injectable()
 export class YourService extends TransactionService {
     public constructor(
-        @InjectRepository(YourRepository) private reposotiry: Repository<Entity>,
+        @InjectRepository(YourRepository) private repository: Repository<Entity>,
         private yourCustomRepository: CustomRepository,
         private yourService: Service,
-        // Let's say you dont want to rebuild this service in the transaction
+        // Let's say you don't want to rebuild this service in the transaction
         private yourCacheService: CacheService,
         @Inject(forwardRef(() => ForwardService)) private yourForwardService: ForwardService
     ) {
@@ -36,25 +40,23 @@ export class YourService extends TransactionService {
         // logic code here
     }
 }
-
 ```
 
 ```typescript
 // your-controller.controller.ts
 @Controller()
 export class SomeController {
-  constructor(
-    private readonly yourService: YourService,
-    private connection: Connection,
-  ) {}
-  
-  async method(payload: SomePayload): Promise<SomeResponse> {
-    return this.connection.transaction(async entityManager => {
-      return await this.yourService.withTransaction(
-          entityManager,
-          { excluded: [CacheService] }
-      ).theMethodWillUseTransaction(payload);
-    });
-  }
+    constructor(
+        private readonly yourService: YourService,
+        private connection: Connection
+    ) {}
+
+    async method(payload: SomePayload): Promise<SomeResponse> {
+        return this.connection.transaction(async (entityManager) => {
+            return await this.yourService
+                .withTransaction(entityManager, { excluded: [CacheService] })
+                .theMethodWillUseTransaction(payload);
+        });
+    }
 }
 ```
