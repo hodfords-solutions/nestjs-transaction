@@ -1,5 +1,5 @@
+import { getDataSource } from '@hodfords/typeorm-helper';
 import { TransactionService } from '../services/transaction.service';
-import { getConnection } from 'typeorm';
 
 /**
  * This decorator is used to mark methods in classes that will open a transaction if one is not already opened.
@@ -14,7 +14,7 @@ export function Transactional(): MethodDecorator {
             throw new Error('Transactional decorator can only be used on a class that extends TransactionService');
         }
         descriptor.value = async function (...args: any[]) {
-            return await getConnection().transaction(async (manager) => {
+            return await getDataSource().transaction(async (manager) => {
                 const transactionInstance = this.withTransaction(manager);
                 return originalMethod.call(transactionInstance, ...args);
             });
