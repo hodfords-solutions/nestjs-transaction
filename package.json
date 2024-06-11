@@ -1,6 +1,6 @@
 {
     "name": "@hodfords/nestjs-transaction",
-    "version": "10.0.3",
+    "version": "10.0.4",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -49,6 +49,6 @@
         "typescript": "5.3.3"
     },
     "dependencies": {
-        "@hodfords/typeorm-helper": "10.0.4"
+        "@hodfords/typeorm-helper": "10.0.5"
     }
 }
