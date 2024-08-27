@@ -2,7 +2,6 @@ import { DynamicModule, Module, ValueProvider } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { TransactionService } from './services/transaction.service';
 import { EXCLUDED_OPTIONS } from './constants/excluded.constant';
-import { ClassType } from './types/class.type';
 import { ExcludeType } from './types/exclude.type';
 
 @Module({})
