@@ -1,6 +1,17 @@
 {
     "version": "0.2",
     "language": "en",
-    "words": ["nestjs", "commitlint", "dtos", "sonarjs", "PARAMTYPES", "typeorm", "postbuild", "diginex", "hodfords"],
+    "words": [
+        "nestjs",
+        "commitlint",
+        "dtos",
+        "sonarjs",
+        "PARAMTYPES",
+        "typeorm",
+        "postbuild",
+        "diginex",
+        "hodfords",
+        "npmjs"
+    ],
     "ignorePaths": ["node_modules", "test", "*.spec.ts", "dist", "cspell.json"]
 }
