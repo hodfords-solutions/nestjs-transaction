@@ -1,28 +1,27 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
+  <a href="http://opensource.hodfords.uk" target="blank"><img src="https://opensource.hodfords.uk/img/logo.svg" width="320" alt="Hodfords Logo" /></a>
 </p>
 
-# nestjs-transaction
-
-## Description
-
-Nest transaction help you easily work with `transaction` more than ever!
+<p align="center"> <b>nestjs-transaction</b> makes managing database transactions in NestJS easy and straightforward. It provides simple tools to start, commit, and roll back transactions, helping you ensure that multiple database operations are completed successfully or not at all. With `nestjs-transaction`, you can handle complex transaction scenarios with ease, making your data handling more reliable and error-free. </p>
 
 ## Installation 🤖
 
+Install the `nestjs-transaction` package with:
+
 ```ts
-npm install @hodfords/nestjs-transaction --save-dev
+npm install @hodfords/nestjs-transaction --save
 ```
 
-## Usage ⚡
+## Usage 🚀
 
-You need to extend the `TransactionService` imported from library in your `Service` first and then call your service
-with this `withTransaction` method in the callback of transaction you are using.
+First, extend the `TransactionService` imported from the library in your service, and then use the `withTransaction`
+method within the transaction callback to call your service.
 
-Code demo:
+### How to use
+
+##### your-service.service.ts
 
 ```typescript
-// your-service.service.ts
 @Injectable()
 export class YourService extends TransactionService {
     public constructor(
@@ -42,8 +41,9 @@ export class YourService extends TransactionService {
 }
 ```
 
+##### your-controller.controller.ts
+
 ```typescript
-// your-controller.controller.ts
 @Controller()
 export class SomeController {
     constructor(
@@ -60,3 +60,16 @@ export class SomeController {
     }
 }
 ```
+
+### Exclude services from transaction
+
+You can configure services to be excluded from transactions by specifying them in `transactionConfig` and importing it
+into `AppModule`
+
+```typescript
+export const transactionConfig = TransactionModule.forRoot([MailService, I18nService, StorageService, DataSource]);
+```
+
+## License 📝
+
+This project is licensed under the MIT License
