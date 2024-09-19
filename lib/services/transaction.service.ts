@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PARAMTYPES_METADATA, SELF_DECLARED_DEPS_METADATA } from '@nestjs/common/constants';
 import { ModuleRef } from '@nestjs/core';
-import { isString } from 'lodash';
+import { isFunction, isString } from 'lodash';
 import { EntityManager, Repository } from 'typeorm';
 import { ClassType } from '../types/class.type';
 import { ForwardRef } from '../types/forward-ref.type';
@@ -16,7 +16,7 @@ export class TransactionService {
     protected excluded: ExcludeType[] = [];
 
     public withTransaction(manager: EntityManager, transactionOptions: TransactionOption = {}): this {
-        let cache: Map<string, any> = new Map();
+        const cache: Map<string, any> = new Map();
         return this.findArgumentsForProvider(
             this.constructor as ClassType<this>,
             manager,
@@ -29,7 +29,7 @@ export class TransactionService {
         );
     }
 
-    private refId(param: ProviderParam) {
+    private refId(param: ProviderParam): string {
         return `${(param as ClassType).name}-ref`;
     }
 
@@ -39,17 +39,18 @@ export class TransactionService {
         manager: EntityManager,
         excluded: ExcludeType[],
         cache: Map<string, any>
-    ) {
-        let tmpParam = (param as ForwardRef).forwardRef();
-        tmpParam = this.getOverrideProvider(tmpParam);
+    ): any {
+        const tmpParam: ClassType = this.getOverrideProvider((param as ForwardRef).forwardRef());
         const id = this.refId(instanceHost);
+
         if (cache.has(this.refId(tmpParam))) {
             return cache.get(this.refId(tmpParam));
         }
         if (!cache.has(id)) {
             cache.set(id, new (instanceHost as ClassType)());
         }
-        return this.findArgumentsForProvider(tmpParam as ClassType, manager, excluded, cache);
+
+        return this.findArgumentsForProvider(tmpParam, manager, excluded, cache);
     }
 
     private getArgument(
@@ -71,14 +72,11 @@ export class TransactionService {
         } else if ((param as ForwardRef).forwardRef) {
             return this.resolveForwardRefArgument(param, instanceHost, manager, excluded, cache);
         }
-        const isExcluded =
-            excluded.length > 0 &&
-            excluded.some((ex) => {
-                if (isString(ex)) {
-                    return ex === id;
-                }
-                return (ex as ClassType).name === id;
-            });
+        const isExcluded = excluded.some((item) => {
+            const excludedId = isString(item) ? item : (item as ClassType).name;
+            return excludedId === id;
+        });
+
         if (id === ModuleRef.name) {
             return TransactionService.moduleRef;
         }
@@ -86,11 +84,11 @@ export class TransactionService {
             /// Returns current instance of service, if it is excluded
             return TransactionService.moduleRef.get(tmpParam, { strict: false });
         }
-        let argument: Repository<any>;
         if (cache.has(id)) {
             return cache.get(id);
         }
 
+        let argument: Repository<any>;
         const canBeRepository = id.includes('Repository') || this.hasRepositoryProperties(param);
         if (isString(tmpParam) || canBeRepository) {
             argument = this.getRepositoryArgument(canBeRepository, tmpParam, manager);
@@ -98,6 +96,7 @@ export class TransactionService {
             tmpParam = this.getOverrideProvider(tmpParam);
             argument = this.findArgumentsForProvider(tmpParam as ClassType, manager, excluded, cache);
         }
+
         cache.set(id, argument);
         return argument;
     }
@@ -110,34 +109,39 @@ export class TransactionService {
         );
     }
 
-    private getOverrideProvider(param: string | ClassType) {
+    private getOverrideProvider(param: string | ClassType): any {
         return TransactionService.moduleRef.get(param, { strict: false }).constructor;
     }
 
-    private getRepositoryArgument(canBeRepository: boolean, tmpParam: string | ClassType, manager: EntityManager) {
+    private getRepositoryArgument(
+        canBeRepository: boolean,
+        tmpParam: string | ClassType,
+        manager: EntityManager
+    ): Repository<any> {
         let dependency: Repository<any>;
         let isCustomRepository = false;
+
         try {
             if (canBeRepository) {
-                tmpParam = isString(tmpParam)
-                    ? TransactionService.moduleRef.get(tmpParam, { strict: false })
-                    : tmpParam;
-                const repository = TransactionService.moduleRef.get(tmpParam, { strict: false });
-                dependency = manager.withRepository(repository);
+                tmpParam =
+                    isString(tmpParam) || isFunction(tmpParam)
+                        ? TransactionService.moduleRef.get(tmpParam, { strict: false })
+                        : tmpParam;
+                dependency = manager.withRepository(tmpParam as any);
                 isCustomRepository = true;
             }
-        } catch (error) {
+        } catch {
             dependency = TransactionService.moduleRef.get(tmpParam, { strict: false });
         }
+
         const isRepository = (dependency instanceof Repository || canBeRepository) && !isCustomRepository;
         if (isRepository) {
             // If the dependency is a repository, make a new repository with the desired transaction manager.
             const entity: any = dependency.metadata.target;
             return manager.getRepository(entity);
-        } else {
-            // The dependency is not a repository, use it directly.
-            return dependency;
         }
+
+        return dependency;
     }
 
     private findArgumentsForProvider(
@@ -145,7 +149,7 @@ export class TransactionService {
         manager: EntityManager,
         excluded: ExcludeType[],
         cache: Map<string, any>
-    ) {
+    ): any {
         const args: any[] = [];
         const keys = Reflect.getMetadataKeys(constructor);
 
