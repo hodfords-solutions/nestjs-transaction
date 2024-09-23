@@ -6,7 +6,7 @@ import { ExcludeType } from './types/exclude.type';
 
 @Module({})
 export class TransactionModule {
-    constructor(private moduleRef: ModuleRef) {
+    constructor(moduleRef: ModuleRef) {
         TransactionService.moduleRef = moduleRef;
     }
 
@@ -15,7 +15,6 @@ export class TransactionModule {
             provide: EXCLUDED_OPTIONS,
             useValue: excluded
         };
-
         return {
             module: TransactionModule,
             providers: [excludedProviders],

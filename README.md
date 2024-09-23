@@ -44,15 +44,17 @@ export class YourService extends TransactionService {
 ##### your-controller.controller.ts
 
 ```typescript
+import { DataSource } from 'typeorm';
+
 @Controller()
 export class SomeController {
     constructor(
         private readonly yourService: YourService,
-        private connection: Connection
+        private dataSource: DataSource
     ) {}
 
     async method(payload: SomePayload): Promise<SomeResponse> {
-        return this.connection.transaction(async (entityManager) => {
+        return this.dataSource.transaction(async (entityManager) => {
             return await this.yourService
                 .withTransaction(entityManager, { excluded: [CacheService] })
                 .theMethodWillUseTransaction(payload);

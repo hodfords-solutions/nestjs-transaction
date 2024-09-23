@@ -1,0 +1,21 @@
+{
+    "collection": "@nestjs/schematics",
+    "sourceRoot": "samples/quickstart/src",
+    "projects": {
+        "nestjs-transaction": {
+            "type": "library",
+            "root": "lib",
+            "entryFile": "index",
+            "sourceRoot": "lib"
+        }
+    },
+    "compilerOptions": {
+        "webpack": false,
+        "assets": [
+            {
+                "include": "../lib/public/**",
+                "watchAssets": true
+            }
+        ]
+    }
+}
