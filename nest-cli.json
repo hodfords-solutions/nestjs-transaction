@@ -1,6 +1,6 @@
 {
     "collection": "@nestjs/schematics",
-    "sourceRoot": "samples/quickstart/src",
+    "sourceRoot": "sample/quickstart/src",
     "projects": {
         "nestjs-transaction": {
             "type": "library",
