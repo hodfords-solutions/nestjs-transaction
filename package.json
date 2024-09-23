@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "prebuild": "rimraf dist",
-        "build": "nest build",
+        "build": "tsc",
         "cspell": "cspell",
         "format": "prettier --write \"samples/*/src/**/*.ts\" \"lib/**/*.ts\"",
         "postbuild": "cp package.json dist/lib && cp README.md dist/lib && cp .npmrc dist/lib",
