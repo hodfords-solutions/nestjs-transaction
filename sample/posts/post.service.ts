@@ -4,7 +4,6 @@ import { PostEntity } from './post.entity';
 import { PostRepository } from './post.repository';
 import { getDataSource } from '@hodfords/typeorm-helper';
 import { Transactional } from '../../lib';
-import { RunAfterTransactionCommit } from '../../lib/decorators/run-after-transaction-commit.decorator';
 import { runAfterTransactionCommit } from '../../lib/helpers/run-after-transaction-commit.helper';
 
 @Injectable()

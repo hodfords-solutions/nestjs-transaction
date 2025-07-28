@@ -1,5 +1,4 @@
 import { runInReplication } from '../helpers/run-in-replication.helper';
-import { CLS_DB_REPLICATION_NAMESPACE } from '../constants/cls-replication.constant';
 import { RUNNING_IN_TRANSACTION_WATERMARK } from '../constants/cls-transaction.constant';
 
 export function UseMasterNode(): MethodDecorator {

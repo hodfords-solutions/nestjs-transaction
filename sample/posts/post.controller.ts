@@ -2,7 +2,6 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/commo
 import { PostService } from './post.service';
 import { CreatePostDto } from './post.dto';
 import { DataSource } from 'typeorm';
-import { UseMasterNode } from '../../lib/decorators/use-master-node.decorator';
 import { UseSlaveNode } from '../../lib/decorators/use-slave-node.decorator';
 import { Transactional } from '../../lib';
 

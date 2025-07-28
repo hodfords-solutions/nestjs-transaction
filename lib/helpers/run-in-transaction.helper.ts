@@ -10,7 +10,6 @@ import {
 import { runInReplication } from './run-in-replication.helper';
 import { CLS_DB_TRANSACTION_NAMESPACE } from '../constants/cls-transaction.constant';
 import { TransactionHook } from '../types/transaction-hook.type';
-import { IsolationLevel } from 'typeorm/driver/types/IsolationLevel';
 import { TransactionalOption } from '../types/transactional-option.type';
 
 async function runHooks(hooks: TransactionHook[]) {
