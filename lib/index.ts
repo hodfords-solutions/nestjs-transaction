@@ -1,8 +1,8 @@
+import './helpers/patcher.helper';
 export * from './transaction.module';
-export * from './constants/excluded.constant';
-export * from './interfaces/transaction-option.interface';
-export * from './services/transaction.service';
 export * from './decorators/transactional.decorator';
-export * from './types/class.type';
-export * from './types/forward-ref.type';
-export * from './types/provider-param.type';
+export * from './decorators/use-master-node.decorator';
+export * from './decorators/use-slave-node.decorator';
+export * from './decorators/run-after-transaction-commit.decorator';
+export * from './types/transaction-option.type';
+export * from './helpers/run-after-transaction-commit.helper';

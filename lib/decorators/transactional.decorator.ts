@@ -1,23 +1,16 @@
-import { getDataSource } from '@hodfords/typeorm-helper';
-import { TransactionService } from '../services/transaction.service';
+import { RUNNING_IN_TRANSACTION_WATERMARK } from '../constants/cls-transaction.constant';
+import { runInTransaction } from '../helpers/run-in-transaction.helper';
+import { TransactionalOption } from '../types/transactional-option.type';
 
-/**
- * This decorator is used to mark methods in classes that will open a transaction if one is not already opened.
- * The method is applied this decorator can not be reused on other transaction methods due to difference transaction isolation levels.
- * Should apply to methods that are entry point of data manipulation or http requests.
- * @returns {(target: any) => any}
- */
-export function Transactional(): MethodDecorator {
+export function Transactional(option: TransactionalOption = {}): MethodDecorator {
     return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
         const originalMethod = descriptor.value;
-        if (!(target instanceof TransactionService)) {
-            throw new Error('Transactional decorator can only be used on a class that extends TransactionService');
-        }
         descriptor.value = async function (...args: any[]) {
-            return await getDataSource().transaction(async (manager) => {
-                const transactionInstance = this.withTransaction(manager);
-                return originalMethod.call(transactionInstance, ...args);
-            });
+            return runInTransaction(() => {
+                return originalMethod.call(this, ...args);
+            }, option);
         };
+        Reflect.defineMetadata(RUNNING_IN_TRANSACTION_WATERMARK, true, descriptor.value);
+        return descriptor;
     };
 }

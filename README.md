@@ -14,64 +14,134 @@ npm install @hodfords/nestjs-transaction --save
 
 ## Usage 🚀
 
-First, extend the `TransactionService` imported from the library in your service, and then use the `withTransaction`
-method within the transaction callback to call your service.
+First, you need to import the `TransactionModule` into your `AppModule` and 
+
+```typescript
+import { Module } from '@nestjs/common';
+import { TransactionModule } from '@hodfords/nestjs-transaction';
+
+@Module({
+    imports: [
+        TransactionModule.forRoot({
+            autoUseMasterNodeForChangeRequest: true
+        }),
+        // other modules
+    ],
+    controllers: [],
+    providers: [],
+})
+export class AppModule {}
+```
+#### Optional Configuration
+You can configure the `TransactionModule` with the following options:
+- `autoUseMasterNodeForChangeRequest`: If set to `true`, the module will automatically use the master node for change requests (except GET). This is useful for ensuring that write operations are always directed to the correct database node.
 
 ### How to use
 
-##### your-service.service.ts
+#### Transactional
+
+You can use the `@Transactional` decorator to mark a method as transactional. This means that all database operations within this method and child methods will be executed within a transaction context. If any operation fails, the entire transaction will be rolled back, ensuring data integrity.
+
+In any service, you can use the `@Transactional` decorator to ensure that the method is executed within a transaction context:
+
+> **Note**: We suggest using the `@Transactional` decorator on Controller/Task/Cron jobs methods, as it will automatically handle the transaction lifecycle for you. However, you can also use it in services if needed.
 
 ```typescript
+@Transactional()
+async myTransactionalMethod() {
+    await this.myRepository.save(myEntity);
+}
+```
+
+In controllers, you can also use the `@Transactional` decorator to ensure that the entire request is wrapped in a transaction:
+```typescript
+
+import { Controller, Post } from '@nestjs/common';
+import { Transactional } from '@hodfords/nestjs-transaction';
+import { MyService } from './my.service';
+
+@Controller('my')
+export class MyController {
+    constructor(private myService: MyService) {}
+    
+    @Post('create')
+    @Transactional()
+    async create() {
+        return this.myService.create();
+    }
+}
+```
+
+You also use the `@Transactional` decorator with options to control the transaction behavior, such as isolation level. For example:
+
+```typescript
+@Transactional({ isolationLevel: 'SERIALIZABLE'})
+async myTransactionalMethod() {
+    // This method will run in a transaction with SERIALIZABLE isolation level
+    await this.myRepository.save(myEntity);
+}
+```
+
+#### Replication
+You can use the `@UseMasterNode`/`@UseSlaveNode` decorator to ensure that a method is executed on the master/slave node. This is useful for write operations that need to be directed to the master/slave database node.
+
+```typescript
+import { Controller, Post } from '@nestjs/common';
+import { UseMasterNode } from '@hodfords/nestjs-transaction';
+import { MyService } from './my.service';
+
+@Controller('my')
+export class MyController {
+    constructor(private myService: MyService) {}
+    
+    @Post('create')
+    @UseMasterNode()
+    async create() {
+        return this.myService.create();
+    }
+}
+```
+
+#### Hooks
+
+You can use the `@RunAfterTransactionCommit` decorator to run a method after a transaction has been successfully committed. This is useful for performing actions that should only occur if the transaction was successful.
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { RunAfterTransactionCommit } from '@hodfords/nestjs-transaction';
+import { PostRepository } from './post.repository';
+
 @Injectable()
-export class YourService extends TransactionService {
-    public constructor(
-        @InjectRepository(YourRepository) private repository: Repository<Entity>,
-        private yourCustomRepository: CustomRepository,
-        private yourService: Service,
-        // Let's say you don't want to rebuild this service in the transaction
-        private yourCacheService: CacheService,
-        @Inject(forwardRef(() => ForwardService)) private yourForwardService: ForwardService
-    ) {
-        super();
+export class MyService {
+
+    constructor(private postRepo: PostRepository) {
     }
 
-    async theMethodWillUseTransaction(payload: SomePayload) {
-        // logic code here
+    @Transactional()
+    async create() {
+        // Perform some database operations
+        await this.postRepo.createPost({ title: 'New Post', content: 'This is a new post.' });
+        await this.emitEvent();
     }
-}
-```
 
-##### your-controller.controller.ts
-
-```typescript
-import { DataSource } from 'typeorm';
-
-@Controller()
-export class SomeController {
-    constructor(
-        private readonly yourService: YourService,
-        private dataSource: DataSource
-    ) {}
-
-    async method(payload: SomePayload): Promise<SomeResponse> {
-        return this.dataSource.transaction(async (entityManager) => {
-            return await this.yourService
-                .withTransaction(entityManager, { excluded: [CacheService] })
-                .theMethodWillUseTransaction(payload);
-        });
+    @RunAfterTransactionCommit()
+    async emitEvent() {
+        // This method will be called after the transaction is committed
+        console.log('Transaction committed successfully!');
     }
 }
 ```
 
-### Exclude services from transaction
-
-You can configure services to be excluded from transactions by specifying them in `transactionConfig` and importing it
-into `AppModule`
+You also use it with method `runAfterTransactionCommit` without the decorator:
 
 ```typescript
-export const transactionConfig = TransactionModule.forRoot([MailService, I18nService, StorageService, DataSource]);
-```
 
+this.postRepo.create(...);
+runAfterTransactionCommit(() => {
+    // This code will run after the transaction is committed
+    console.log('Transaction committed successfully!');
+});
+```
 ## License 📝
 
 This project is licensed under the MIT License

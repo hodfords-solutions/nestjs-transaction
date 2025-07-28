@@ -1,23 +1,22 @@
-import { DynamicModule, Module, ValueProvider } from '@nestjs/common';
-import { ModuleRef } from '@nestjs/core';
-import { TransactionService } from './services/transaction.service';
-import { EXCLUDED_OPTIONS } from './constants/excluded.constant';
-import { ExcludeType } from './types/exclude.type';
+import { DynamicModule, Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { AutoSelectMasterNodeInterceptor } from './interceptors/auto-select-master-node.interceptor';
+import { TransactionOption } from './types/transaction-option.type';
 
 @Module({})
 export class TransactionModule {
-    constructor(moduleRef: ModuleRef) {
-        TransactionService.moduleRef = moduleRef;
-    }
+    static forRoot(option: TransactionOption = {}): DynamicModule {
+        const providers = [];
+        if (option.autoUseMasterNodeForChangeRequest) {
+            providers.push({
+                provide: APP_INTERCEPTOR,
+                useClass: AutoSelectMasterNodeInterceptor
+            });
+        }
 
-    static forRoot(excluded: ExcludeType[] = []): DynamicModule {
-        const excludedProviders: ValueProvider<ExcludeType[]> = {
-            provide: EXCLUDED_OPTIONS,
-            useValue: excluded
-        };
         return {
             module: TransactionModule,
-            providers: [excludedProviders],
+            providers,
             exports: []
         };
     }
