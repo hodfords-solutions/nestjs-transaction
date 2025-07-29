@@ -1,8 +1,8 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './post.dto';
 import { DataSource } from 'typeorm';
-import { UseSlaveNode } from '../../lib/decorators/use-slave-node.decorator';
+import { UseSlaveNode } from '../../lib';
 import { Transactional } from '../../lib';
 
 @Controller('posts')
@@ -23,8 +23,8 @@ export class PostController {
     @Post()
     @HttpCode(HttpStatus.NO_CONTENT)
     @Transactional()
-    // @UseSlaveNode()
-    createPost(@Body() dto: CreatePostDto): Promise<void> {
+    @UseSlaveNode()
+    createPost(@Body() dto: CreatePostDto, @Req() a: any): Promise<void> {
         return this.postService.createPost(dto);
     }
 }
