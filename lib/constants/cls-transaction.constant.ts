@@ -1,7 +1,6 @@
-import cls from '@hodfords/cls-hooked';
+import { ClsServiceManager } from 'nestjs-cls';
 
-export const CLS_DB_TRANSACTION_NAMESPACE_NAME = 'db-transaction';
-export const CLS_DB_TRANSACTION_NAMESPACE = cls.createNamespace(CLS_DB_TRANSACTION_NAMESPACE_NAME);
+export const CLS_DB_TRANSACTION_NAMESPACE = ClsServiceManager.getClsService();
 
 export const CLS_DB_IS_IN_TRANSACTION_KEY = 'is-in-transaction';
 export const CLS_DB_TRANSACTION_MANAGER_KEY = 'manager-transaction';
