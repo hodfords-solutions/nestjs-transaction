@@ -1,6 +1,7 @@
-import { ClsServiceManager } from 'nestjs-cls';
+import { ClsService } from 'nestjs-cls';
+import { AsyncLocalStorage } from 'async_hooks';
 
-export const CLS_DB_TRANSACTION_NAMESPACE = ClsServiceManager.getClsService();
+export const CLS_DB_TRANSACTION_NAMESPACE = new ClsService(new AsyncLocalStorage());
 
 export const CLS_DB_IS_IN_TRANSACTION_KEY = 'is-in-transaction';
 export const CLS_DB_TRANSACTION_MANAGER_KEY = 'manager-transaction';

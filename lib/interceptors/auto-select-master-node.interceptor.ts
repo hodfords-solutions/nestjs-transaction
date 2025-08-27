@@ -26,7 +26,7 @@ export class AutoSelectMasterNodeInterceptor implements NestInterceptor {
         if (isRunWithReplication) {
             return next.handle();
         }
-        return CLS_DB_REPLICATION_NAMESPACE.runAndReturn(() => {
+        return CLS_DB_REPLICATION_NAMESPACE.run(() => {
             return runInReplication('master', () => {
                 return next.handle();
             });

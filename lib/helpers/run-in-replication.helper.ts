@@ -8,7 +8,7 @@ export function runInReplication(mode: ReplicationMode, fn: any) {
         return fn();
     }
 
-    return CLS_DB_REPLICATION_NAMESPACE.runAndReturn(() => {
+    return CLS_DB_REPLICATION_NAMESPACE.run(() => {
         markInCustomReplication(mode);
         return fn();
     });
