@@ -23,7 +23,7 @@ export async function runInTransaction(fn: any, option: TransactionalOption) {
     if (isInTransaction()) {
         return fn();
     }
-    return CLS_DB_TRANSACTION_NAMESPACE.runAndReturn(async () => {
+    return CLS_DB_TRANSACTION_NAMESPACE.run(async () => {
         const dataSource = getDataSource();
         let result: any;
         try {
