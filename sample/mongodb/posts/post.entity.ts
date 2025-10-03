@@ -1,5 +1,4 @@
-import { Column, Entity, ObjectIdColumn } from 'typeorm';
-import { ObjectId } from 'mongodb';
+import { Column, Entity, ObjectIdColumn, ObjectId } from 'typeorm';
 
 @Entity('posts')
 export class PostEntity {
