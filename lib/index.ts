@@ -1,4 +1,5 @@
 import './helpers/patcher.helper';
+import './helpers/patcher-mongo.helper';
 export * from './transaction.module';
 export * from './decorators/transactional.decorator';
 export * from './decorators/use-master-node.decorator';

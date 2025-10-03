@@ -5,12 +5,14 @@ import {
     isInTransaction,
     markInTransaction,
     markOutOfTransaction,
-    setCurrentTransactionManager
+    setCurrentTransactionManager,
+    setCurrentTransactionSession
 } from './cls-db-transaction.helper';
 import { runInReplication } from './run-in-replication.helper';
 import { CLS_DB_TRANSACTION_NAMESPACE } from '../constants/cls-transaction.constant';
 import { TransactionHook } from '../types/transaction-hook.type';
 import { TransactionalOption } from '../types/transactional-option.type';
+import { ClientSession, MongoEntityManager } from 'typeorm';
 
 async function runHooks(hooks: TransactionHook[]) {
     for (const hook of hooks.filter((h) => !h.executed)) {
@@ -24,16 +26,26 @@ export async function runInTransaction(fn: any, option: TransactionalOption) {
         return fn();
     }
     return CLS_DB_TRANSACTION_NAMESPACE.run(async () => {
-        const dataSource = getDataSource();
         let result: any;
         try {
-            result = await dataSource.transaction(option?.isolationLevel, (manager) => {
-                markInTransaction();
-                setCurrentTransactionManager(manager);
-                return fn();
-            });
+            const dataSource = getDataSource();
+            if (dataSource.options.type === 'mongodb') {
+                result = await runInMongoTransaction((session: ClientSession, manager: MongoEntityManager) => {
+                    markInTransaction();
+                    setCurrentTransactionManager(manager);
+                    setCurrentTransactionSession(session);
+                    return fn();
+                }, option);
+            } else {
+                result = await dataSource.transaction(option?.isolationLevel, (manager) => {
+                    markInTransaction();
+                    setCurrentTransactionManager(manager);
+                    return fn();
+                });
+            }
             markOutOfTransaction();
             setCurrentTransactionManager(null);
+            setCurrentTransactionSession(null);
             await runInReplication('master', async () => {
                 await runHooks(getTransactionCommitHooks());
             });
@@ -43,4 +55,21 @@ export async function runInTransaction(fn: any, option: TransactionalOption) {
 
         return result;
     });
+}
+
+export async function runInMongoTransaction(fn: any, option: TransactionalOption) {
+    const dataSource = getDataSource();
+    const manager: MongoEntityManager = dataSource.manager as MongoEntityManager;
+    const session = manager.mongoQueryRunner.databaseConnection.startSession();
+
+    try {
+        session.startTransaction();
+        await fn(session, manager);
+        await session.commitTransaction();
+    } catch (exception) {
+        await session.abortTransaction();
+        throw exception;
+    } finally {
+        await session.endSession();
+    }
 }

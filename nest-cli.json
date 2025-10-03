@@ -1,6 +1,6 @@
 {
     "collection": "@nestjs/schematics",
-    "sourceRoot": "sample",
+    "sourceRoot": "sample/mongodb",
     "projects": {
         "nestjs-transaction": {
             "type": "library",

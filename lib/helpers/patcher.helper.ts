@@ -1,4 +1,12 @@
-import { DataSource, EntityManager, QueryRunner, ReplicationMode, Repository, SelectQueryBuilder } from 'typeorm';
+import {
+    DataSource,
+    EntityManager,
+    MongoRepository,
+    QueryRunner,
+    ReplicationMode,
+    Repository,
+    SelectQueryBuilder
+} from 'typeorm';
 import { getCurrentTransactionManager, isInTransaction } from './cls-db-transaction.helper';
 import { BaseQueryRunner } from 'typeorm/query-runner/BaseQueryRunner';
 import { getCustomReplicationMode } from './cls-db-replication.helper';
@@ -24,7 +32,8 @@ function patchQueryRunner(repositoryType: unknown) {
         configurable: true,
         get() {
             if (isInTransaction()) {
-                return getCurrentTransactionManager()?.queryRunner;
+                const manager = getCurrentTransactionManager();
+                return manager?.mongoQueryRunner || manager?.queryRunner;
             }
             return this.defaultManager;
         },
@@ -35,6 +44,7 @@ function patchQueryRunner(repositoryType: unknown) {
 }
 
 patchManager(Repository.prototype);
+patchManager(MongoRepository.prototype);
 patchManager(BaseQueryRunner.prototype);
 patchManager(DataSource.prototype);
 patchQueryRunner(SelectQueryBuilder.prototype);

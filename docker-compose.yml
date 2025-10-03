@@ -1,34 +1,92 @@
 version: '3.3'
 services:
-  postgresql-master:
-    image: docker.io/bitnami/postgresql:17
+#  postgresql-master:
+#    image: docker.io/bitnami/postgresql:17
+#    ports:
+#      - '15432:5432'
+#    volumes:
+#      - 'postgresql_master_data:/bitnami/postgresql'
+#    environment:
+#      - POSTGRESQL_REPLICATION_MODE=master
+#      - POSTGRESQL_REPLICATION_USER=repl_user
+#      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+#      - POSTGRESQL_USERNAME=postgres
+#      - POSTGRESQL_PASSWORD=my_password
+#      - POSTGRESQL_DATABASE=my_database
+#      - ALLOW_EMPTY_PASSWORD=yes
+#  postgresql-slave:
+#    image: docker.io/bitnami/postgresql:17
+#    ports:
+#      - '25432:5432'
+#    depends_on:
+#      - postgresql-master
+#    environment:
+#      - POSTGRESQL_REPLICATION_MODE=slave
+#      - POSTGRESQL_REPLICATION_USER=repl_user
+#      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+#      - POSTGRESQL_MASTER_HOST=postgresql-master
+#      - POSTGRESQL_PASSWORD=my_password
+#      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+#      - ALLOW_EMPTY_PASSWORD=yes
+
+  mongo1:
+    image: mongo:8.0
+    command: [ "--replSet", "rs0", "--bind_ip_all" ]
     ports:
-      - '15432:5432'
+      - "27017:27017"
     volumes:
-      - 'postgresql_master_data:/bitnami/postgresql'
-    environment:
-      - POSTGRESQL_REPLICATION_MODE=master
-      - POSTGRESQL_REPLICATION_USER=repl_user
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
-      - POSTGRESQL_USERNAME=postgres
-      - POSTGRESQL_PASSWORD=my_password
-      - POSTGRESQL_DATABASE=my_database
-      - ALLOW_EMPTY_PASSWORD=yes
-  postgresql-slave:
-    image: docker.io/bitnami/postgresql:17
+      - mongo1_data:/data/db
+    networks:
+      - mongo-net
+
+  mongo2:
+    image: mongo:8.0
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27018" ]
     ports:
-      - '25432:5432'
+      - "27018:27018"
+    volumes:
+      - mongo2_data:/data/db
+    networks:
+      - mongo-net
+
+  mongo3:
+    image: mongo:8.0
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27019" ]
+    ports:
+      - "27019:27019"
+    volumes:
+      - mongo3_data:/data/db
+    networks:
+      - mongo-net
+
+  mongo-init:
+    image: mongo:8.0
     depends_on:
-      - postgresql-master
-    environment:
-      - POSTGRESQL_REPLICATION_MODE=slave
-      - POSTGRESQL_REPLICATION_USER=repl_user
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
-      - POSTGRESQL_MASTER_HOST=postgresql-master
-      - POSTGRESQL_PASSWORD=my_password
-      - POSTGRESQL_MASTER_PORT_NUMBER=5432
-      - ALLOW_EMPTY_PASSWORD=yes
+      - mongo1
+      - mongo2
+      - mongo3
+    entrypoint: >
+      bash -c "
+      sleep 5 &&
+      mongosh --host mongo1:27017 --eval '
+        rs.initiate({
+          _id: \"rs0\",
+          members: [
+            { _id: 0, host: \"mongo1:27017\" },
+            { _id: 1, host: \"mongo2:27018\" },
+            { _id: 2, host: \"mongo3:27019\" }
+          ]
+        })
+      ' || echo 'Replica set already initiated'
+      "
+    networks:
+      - mongo-net
 networks:
   webnet:
+  mongo-net:
+    driver: bridge
 volumes:
   postgresql_master_data:
+  mongo1_data:
+  mongo2_data:
+  mongo3_data:

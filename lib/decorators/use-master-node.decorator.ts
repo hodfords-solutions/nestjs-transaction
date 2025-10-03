@@ -7,7 +7,6 @@ export function UseMasterNode(): MethodDecorator {
         const originalMethod = descriptor.value;
         const newMethod = async function (...args: any[]) {
             if (Reflect.getMetadata(RUNNING_IN_TRANSACTION_WATERMARK, descriptor.value)) {
-                console.log('Running in transaction, using original method');
                 return originalMethod.call(this, ...args);
             }
             return runInReplication('master', () => {

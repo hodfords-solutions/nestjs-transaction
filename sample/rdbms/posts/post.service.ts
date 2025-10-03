@@ -3,8 +3,7 @@ import { CreatePostDto } from './post.dto';
 import { PostEntity } from './post.entity';
 import { PostRepository } from './post.repository';
 import { getDataSource } from '@hodfords/typeorm-helper';
-import { Transactional } from '../../lib';
-import { runAfterTransactionCommit } from '../../lib/helpers/run-after-transaction-commit.helper';
+import { runAfterTransactionCommit, Transactional } from '@hodfords/nestjs-transaction';
 
 @Injectable()
 export class PostService {
