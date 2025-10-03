@@ -27,8 +27,7 @@ import {
     ChangeStream,
     UpdateOptions,
     UnorderedBulkOperation,
-    OrderedBulkOperation,
-    ReadPreference
+    OrderedBulkOperation
 } from 'typeorm';
 import { getCurrentTransactionSession, isInTransaction } from '../helpers/cls-db-transaction.helper';
 import { getCustomReplicationMode } from '../helpers/cls-db-replication.helper';
@@ -47,8 +46,7 @@ export class CustomMongoQueryRunner extends MongoQueryRunner {
         if (customMode) {
             return {
                 ...options,
-                readPreference:
-                    customMode === 'master' ? ReadPreference.PRIMARY_PREFERRED : ReadPreference.SECONDARY_PREFERRED
+                readPreference: customMode === 'master' ? 'primaryPreferred' : 'secondaryPreferred'
             } as T;
         }
 
