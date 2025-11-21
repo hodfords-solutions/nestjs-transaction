@@ -39,7 +39,7 @@ export class CustomMongoQueryRunner extends MongoQueryRunner {
         }
 
         if (isInTransaction()) {
-            return { ...options, session: getCurrentTransactionSession(), readPreference: 'primaryPreferred' };
+            return { ...options, session: getCurrentTransactionSession(), readPreference: 'primary' };
         }
 
         const customMode = getCustomReplicationMode();
