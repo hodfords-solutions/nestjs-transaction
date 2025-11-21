@@ -62,10 +62,13 @@ export async function runInMongoTransaction(fn: any, option: TransactionalOption
     const manager: MongoEntityManager = dataSource.manager as MongoEntityManager;
     const session = manager.mongoQueryRunner.databaseConnection.startSession();
 
+    let result: any;
     try {
         session.startTransaction();
-        await fn(session, manager);
+        result = await fn(session, manager);
         await session.commitTransaction();
+
+        return result;
     } catch (exception) {
         await session.abortTransaction();
         throw exception;
