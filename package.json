@@ -1,6 +1,6 @@
 {
     "name": "@hodfords/nestjs-transaction",
-    "version": "11.2.0",
+    "version": "11.2.1",
     "description": "Manages database transactions in NestJS applications",
     "main": "index.js",
     "scripts": {
@@ -35,39 +35,42 @@
     },
     "homepage": "https://github.com/hodfords-solutions/nestjs-transaction#readme",
     "devDependencies": {
-        "@hodfords/nestjs-eslint-config": "11.0.1",
+        "@hodfords/nestjs-eslint-config": "11.0.2",
         "@hodfords/nestjs-prettier-config": "11.0.1",
-        "@hodfords/typeorm-helper": "11.0.1",
-        "@nestjs/cli": "11.0.2",
-        "@nestjs/common": "11.0.11",
-        "@nestjs/core": "11.0.11",
-        "@nestjs/platform-express": "11.0.11",
-        "@nestjs/swagger": "^11.2.0",
+        "@hodfords/typeorm-helper": "11.1.4",
+        "@nestjs/cli": "11.0.16",
+        "@nestjs/common": "11.1.12",
+        "@nestjs/core": "11.1.12",
+        "@nestjs/platform-express": "11.1.12",
+        "@nestjs/swagger": "^11.2.5",
         "@nestjs/typeorm": "11.0.0",
-        "@types/lodash": "4.17.16",
-        "@types/node": "22.13.10",
+        "@types/lodash": "4.17.23",
+        "@types/node": "25.2.0",
         "class-transformer": "0.5.1",
-        "class-validator": "0.14.1",
-        "commander": "13.1.0",
-        "cspell": "8.17.5",
-        "eslint": "9.22.0",
+        "class-validator": "0.14.3",
+        "commander": "14.0.3",
+        "cspell": "9.6.3",
+        "eslint": "9.39.2",
         "husky": "9.1.7",
         "is-ci": "4.1.0",
-        "lint-staged": "15.5.0",
-        "lodash": "4.17.21",
+        "lint-staged": "16.2.7",
+        "lodash": "4.17.23",
         "nestjs-cls": "6.0.1",
-        "pg": "8.14.1",
-        "prettier": "3.5.3",
+        "pg": "8.18.0",
+        "prettier": "3.8.1",
         "reflect-metadata": "0.2.2",
-        "rimraf": "6.0.1",
+        "rimraf": "6.1.2",
         "rxjs": "7.8.2",
-        "typeorm": "0.3.21",
-        "typescript": "5.8.2"
+        "typeorm": "0.3.28",
+        "typescript": "5.9.3"
     },
     "dependencies": {
         "nestjs-cls": "*"
     },
     "peerDependencies": {
         "nestjs-cls": "6.0.1"
+    },
+    "overrides": {
+        "lodash": "4.17.23"
     }
 }
