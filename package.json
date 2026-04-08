@@ -1,6 +1,6 @@
 {
     "name": "@hodfords/nestjs-transaction",
-    "version": "11.3.1",
+    "version": "11.3.2",
     "description": "Manages database transactions in NestJS applications",
     "main": "index.js",
     "scripts": {

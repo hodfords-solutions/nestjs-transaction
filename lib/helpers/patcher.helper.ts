@@ -35,7 +35,7 @@ function patchQueryRunner(repositoryType: unknown) {
                 const manager = getCurrentTransactionManager();
                 return manager?.mongoQueryRunner || manager?.queryRunner;
             }
-            return this.defaultManager;
+            return this.defaultQueryRunner;
         },
         set(queryRunner: QueryRunner | undefined) {
             this.defaultQueryRunner = queryRunner;
