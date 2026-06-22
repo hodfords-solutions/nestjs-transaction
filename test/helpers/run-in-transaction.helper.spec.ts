@@ -51,6 +51,7 @@ beforeEach(() => {
     getDataSourceMock.mockReset();
 });
 
+// eslint-disable-next-line max-lines-per-function
 describe('runInTransaction', () => {
     it('runs the callback directly when already in a transaction', async () => {
         const fn = jest.fn().mockReturnValue('inner');

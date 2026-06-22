@@ -37,7 +37,7 @@ export class PostService {
             title: 'Post with Query Runner',
             content: 'This is a post created using query runner.'
         };
-        const queryRunner = this.postRepo.manager.connection.createQueryRunner();
+        const queryRunner = this.postRepo.manager.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
 

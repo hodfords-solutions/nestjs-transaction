@@ -21,14 +21,12 @@ import {
     InsertOneResult,
     ReplaceOptions,
     UpdateResult,
-    CollStatsOptions,
-    CollStats,
     ChangeStreamOptions,
     ChangeStream,
     UpdateOptions,
     UnorderedBulkOperation,
     OrderedBulkOperation
-} from 'typeorm';
+} from 'typeorm/driver/mongodb/typings';
 import { getCurrentTransactionSession, isInTransaction } from '../helpers/cls-db-transaction.helper';
 import { getCustomReplicationMode } from '../helpers/cls-db-replication.helper';
 
@@ -170,11 +168,6 @@ export class CustomMongoQueryRunner extends MongoQueryRunner {
     ): Promise<Document | UpdateResult> {
         options = this.getOptions(options);
         return super.replaceOne(collectionName, filter, replacement, options);
-    }
-
-    async stats(collectionName: string, options?: CollStatsOptions): Promise<CollStats> {
-        options = this.getOptions(options);
-        return super.stats(collectionName, options);
     }
 
     watch(collectionName: string, pipeline?: Document[], options?: ChangeStreamOptions): ChangeStream {

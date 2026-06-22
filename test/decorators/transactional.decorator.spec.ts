@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-const runInTransactionMock = jest.fn((fn: any, _option?: any) => fn());
+const runInTransactionMock = jest.fn((fn: any, option?: any) => fn());
 jest.mock('../../lib/helpers/run-in-transaction.helper', () => ({
     runInTransaction: (fn: any, option: any) => runInTransactionMock(fn, option)
 }));
@@ -10,6 +10,7 @@ import { RUNNING_IN_TRANSACTION_WATERMARK } from '../../lib/constants/cls-transa
 
 beforeEach(() => runInTransactionMock.mockClear());
 
+// eslint-disable-next-line max-lines-per-function
 describe('@Transactional', () => {
     it('runs the original method through runInTransaction and preserves the return value', async () => {
         class Service {

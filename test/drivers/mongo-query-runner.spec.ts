@@ -3,16 +3,14 @@ import { MongoQueryRunner } from 'typeorm/driver/mongodb/MongoQueryRunner';
 import { CustomMongoQueryRunner } from '../../lib/drivers/mongo-query-runner';
 import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant';
 import { CLS_DB_REPLICATION_NAMESPACE } from '../../lib/constants/cls-replication.constant';
-import {
-    markInTransaction,
-    setCurrentTransactionSession
-} from '../../lib/helpers/cls-db-transaction.helper';
+import { markInTransaction, setCurrentTransactionSession } from '../../lib/helpers/cls-db-transaction.helper';
 import { markInCustomReplication } from '../../lib/helpers/cls-db-replication.helper';
 
 function createRunner(): CustomMongoQueryRunner {
     return Object.create(CustomMongoQueryRunner.prototype) as CustomMongoQueryRunner;
 }
 
+// eslint-disable-next-line max-lines-per-function
 describe('CustomMongoQueryRunner', () => {
     describe('getOptions', () => {
         it('returns the options untouched when outside any transaction or replication', () => {
@@ -64,6 +62,7 @@ describe('CustomMongoQueryRunner', () => {
         });
     });
 
+    // eslint-disable-next-line max-lines-per-function
     describe('methods that delegate to the parent query runner', () => {
         const session = { id: 'tx-session' };
 
@@ -81,7 +80,6 @@ describe('CustomMongoQueryRunner', () => {
             ['insertMany', ['col', [{ a: 1 }]], 'insertMany'],
             ['insertOne', ['col', { a: 1 }], 'insertOne'],
             ['replaceOne', ['col', {}, { a: 1 }], 'replaceOne'],
-            ['stats', ['col'], 'stats'],
             ['watch', ['col', []], 'watch'],
             ['updateMany', ['col', {}, { $set: {} }], 'updateMany'],
             ['updateOne', ['col', {}, { $set: {} }], 'updateOne']

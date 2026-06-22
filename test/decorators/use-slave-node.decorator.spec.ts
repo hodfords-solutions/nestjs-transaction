@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-const runInReplicationMock = jest.fn((_mode: any, fn: any) => fn());
+const runInReplicationMock = jest.fn((mode: any, fn: any) => fn());
 jest.mock('../../lib/helpers/run-in-replication.helper', () => ({
     runInReplication: (mode: any, fn: any) => runInReplicationMock(mode, fn)
 }));
@@ -11,6 +11,7 @@ import { RUNNING_IN_REPLICATION_MODE_WATERMARK } from '../../lib/constants/cls-r
 
 beforeEach(() => runInReplicationMock.mockClear());
 
+// eslint-disable-next-line max-lines-per-function
 describe('@UseSlaveNode', () => {
     it('runs the method inside replication with the slave mode', async () => {
         class Service {

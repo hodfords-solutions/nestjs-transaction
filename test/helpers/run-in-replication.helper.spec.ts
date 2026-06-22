@@ -3,10 +3,7 @@ import { runInReplication } from '../../lib/helpers/run-in-replication.helper';
 import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant';
 import { CLS_DB_REPLICATION_NAMESPACE } from '../../lib/constants/cls-replication.constant';
 import { markInTransaction } from '../../lib/helpers/cls-db-transaction.helper';
-import {
-    getCustomReplicationMode,
-    markInCustomReplication
-} from '../../lib/helpers/cls-db-replication.helper';
+import { getCustomReplicationMode, markInCustomReplication } from '../../lib/helpers/cls-db-replication.helper';
 
 describe('runInReplication', () => {
     it('opens a new replication context and marks the requested mode', async () => {

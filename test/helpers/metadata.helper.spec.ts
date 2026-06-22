@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { cloneMetadata, cloneMethodAndMoveMetadata, moveMetadata } from '../../lib/helpers/metadata.helper';
 
+// eslint-disable-next-line max-lines-per-function
 describe('metadata.helper', () => {
     describe('cloneMetadata', () => {
         it('copies all metadata keys from source to target without removing them from source', () => {

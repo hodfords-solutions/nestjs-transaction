@@ -12,7 +12,7 @@ describe('CustomMongoDriver', () => {
 
         const driver = Object.create(CustomMongoDriver.prototype) as any;
         driver.options = {};
-        driver.connection = { manager };
+        driver.dataSource = { manager };
         driver.mongodb = {
             MongoClient: { connect: jest.fn().mockResolvedValue(client) }
         };

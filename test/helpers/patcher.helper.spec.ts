@@ -5,12 +5,10 @@ import { BaseQueryRunner } from 'typeorm/query-runner/BaseQueryRunner';
 import '../../lib/helpers/patcher.helper';
 import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant';
 import { CLS_DB_REPLICATION_NAMESPACE } from '../../lib/constants/cls-replication.constant';
-import {
-    markInTransaction,
-    setCurrentTransactionManager
-} from '../../lib/helpers/cls-db-transaction.helper';
+import { markInTransaction, setCurrentTransactionManager } from '../../lib/helpers/cls-db-transaction.helper';
 import { markInCustomReplication } from '../../lib/helpers/cls-db-replication.helper';
 
+// eslint-disable-next-line max-lines-per-function
 describe('patcher.helper', () => {
     describe('patched manager accessor', () => {
         const prototypes: Array<[string, any]> = [
@@ -20,7 +18,7 @@ describe('patcher.helper', () => {
             ['DataSource', DataSource.prototype]
         ];
 
-        it.each(prototypes)('%s returns the default manager outside a transaction', (_name, proto) => {
+        it.each(prototypes)('%s returns the default manager outside a transaction', (name, proto) => {
             const instance = Object.create(proto);
             const defaultManager = { id: 'default' };
             instance.manager = defaultManager;
@@ -29,7 +27,7 @@ describe('patcher.helper', () => {
             expect(instance.manager).toBe(defaultManager);
         });
 
-        it.each(prototypes)('%s returns the transaction manager inside a transaction', async (_name, proto) => {
+        it.each(prototypes)('%s returns the transaction manager inside a transaction', async (name, proto) => {
             const instance = Object.create(proto);
             instance.manager = { id: 'default' };
             const txManager = { id: 'tx' };

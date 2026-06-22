@@ -12,7 +12,8 @@ import { runInReplication } from './run-in-replication.helper';
 import { CLS_DB_TRANSACTION_NAMESPACE } from '../constants/cls-transaction.constant';
 import { TransactionHook } from '../types/transaction-hook.type';
 import { TransactionalOption } from '../types/transactional-option.type';
-import { ClientSession, MongoEntityManager } from 'typeorm';
+import { MongoEntityManager } from 'typeorm';
+import { ClientSession } from 'mongodb';
 
 async function runHooks(hooks: TransactionHook[]) {
     for (const hook of hooks.filter((h) => !h.executed)) {

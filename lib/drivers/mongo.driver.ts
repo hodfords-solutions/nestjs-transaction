@@ -15,9 +15,9 @@ export class CustomMongoDriver extends MongoDriver {
             this.buildConnectionOptions(options)
         );
 
-        this.queryRunner = new CustomMongoQueryRunner(this.connection, client) as any;
+        this.queryRunner = new CustomMongoQueryRunner(this.dataSource, client) as any;
         ObjectUtils.assign(this.queryRunner, {
-            manager: this.connection.manager
+            manager: this.dataSource.manager
         });
     }
 }

@@ -1,10 +1,7 @@
 import 'reflect-metadata';
 import { runAfterTransactionCommit } from '../../lib/helpers/run-after-transaction-commit.helper';
 import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant';
-import {
-    getTransactionCommitHooks,
-    markInTransaction
-} from '../../lib/helpers/cls-db-transaction.helper';
+import { getTransactionCommitHooks, markInTransaction } from '../../lib/helpers/cls-db-transaction.helper';
 
 describe('runAfterTransactionCommit', () => {
     it('executes the function immediately when not in a transaction', async () => {

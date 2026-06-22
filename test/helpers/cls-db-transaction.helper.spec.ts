@@ -14,6 +14,7 @@ import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transactio
 
 const runInContext = <T>(fn: () => T): Promise<T> => CLS_DB_TRANSACTION_NAMESPACE.run(async () => fn());
 
+// eslint-disable-next-line max-lines-per-function
 describe('cls-db-transaction.helper', () => {
     describe('markInTransaction / markOutOfTransaction / isInTransaction', () => {
         it('returns undefined when no value has been set yet', () => {
