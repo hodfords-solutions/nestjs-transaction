@@ -1,6 +1,6 @@
 {
     "name": "@hodfords/nestjs-transaction",
-    "version": "11.4.0",
+    "version": "11.4.1",
     "description": "Manages database transactions in NestJS applications",
     "main": "index.js",
     "scripts": {
@@ -73,7 +73,9 @@
         "nestjs-cls": "*"
     },
     "peerDependencies": {
-        "mongodb": "^7.0.0",
         "nestjs-cls": "*"
+    },
+    "optionalDependencies": {
+        "mongodb": "^7.0.0"
     }
 }
