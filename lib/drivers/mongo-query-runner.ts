@@ -68,7 +68,7 @@ export class CustomMongoQueryRunner extends MongoQueryRunner {
         options?: BulkWriteOptions
     ): Promise<any> {
         options = this.getOptions(options);
-        return super.aggregate(collectionName, operations, options);
+        return super.bulkWrite(collectionName, operations, options);
     }
 
     async count(collectionName: string, filter: Filter<Document>, options?: CountOptions): Promise<number> {
