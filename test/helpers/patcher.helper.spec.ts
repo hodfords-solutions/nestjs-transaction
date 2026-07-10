@@ -63,18 +63,18 @@ describe('patcher.helper', () => {
             });
         });
 
-        it('returns the default manager outside a transaction', () => {
+        it('returns the bound query runner outside a transaction', () => {
             const qb = Object.create(SelectQueryBuilder.prototype);
-            const defaultManager = { id: 'default-manager' };
-            qb.defaultManager = defaultManager;
-            expect(qb.queryRunner).toBe(defaultManager);
-        });
-
-        it('stores assignments on the defaultQueryRunner field', () => {
-            const qb = Object.create(SelectQueryBuilder.prototype);
-            const queryRunner = { id: 'assigned' };
+            const queryRunner = { id: 'bound-qr' };
             qb.queryRunner = queryRunner;
             expect(qb.defaultQueryRunner).toBe(queryRunner);
+            expect(qb.queryRunner).toBe(queryRunner);
+        });
+
+        it('never resolves the query runner from the default manager outside a transaction', () => {
+            const qb = Object.create(SelectQueryBuilder.prototype);
+            qb.defaultManager = { id: 'default-manager' };
+            expect(qb.queryRunner).toBeUndefined();
         });
     });
 
