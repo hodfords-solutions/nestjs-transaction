@@ -7,11 +7,11 @@ import {
     markOutOfTransaction,
     setCurrentTransactionManager,
     setCurrentTransactionSession
-} from './cls-db-transaction.helper';
-import { runInReplication } from './run-in-replication.helper';
-import { CLS_DB_TRANSACTION_NAMESPACE } from '../constants/cls-transaction.constant';
-import { TransactionHook } from '../types/transaction-hook.type';
-import { TransactionalOption } from '../types/transactional-option.type';
+} from './cls-db-transaction.helper.js';
+import { runInReplication } from './run-in-replication.helper.js';
+import { CLS_DB_TRANSACTION_NAMESPACE } from '../constants/cls-transaction.constant.js';
+import { TransactionHook } from '../types/transaction-hook.type.js';
+import { TransactionalOption } from '../types/transactional-option.type.js';
 import { MongoEntityManager } from 'typeorm';
 import { ClientSession } from 'mongodb';
 

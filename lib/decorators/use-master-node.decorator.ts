@@ -1,6 +1,6 @@
-import { runInReplication } from '../helpers/run-in-replication.helper';
-import { RUNNING_IN_TRANSACTION_WATERMARK } from '../constants/cls-transaction.constant';
-import { cloneMethodAndMoveMetadata } from '../helpers/metadata.helper';
+import { runInReplication } from '../helpers/run-in-replication.helper.js';
+import { RUNNING_IN_TRANSACTION_WATERMARK } from '../constants/cls-transaction.constant.js';
+import { cloneMethodAndMoveMetadata } from '../helpers/metadata.helper.js';
 
 export function UseMasterNode(): MethodDecorator {
     return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {

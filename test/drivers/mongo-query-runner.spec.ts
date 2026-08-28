@@ -1,10 +1,11 @@
 import 'reflect-metadata';
+import { describe, it, expect, vi } from 'vitest';
 import { MongoQueryRunner } from 'typeorm/driver/mongodb/MongoQueryRunner';
-import { CustomMongoQueryRunner } from '../../lib/drivers/mongo-query-runner';
-import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant';
-import { CLS_DB_REPLICATION_NAMESPACE } from '../../lib/constants/cls-replication.constant';
-import { markInTransaction, setCurrentTransactionSession } from '../../lib/helpers/cls-db-transaction.helper';
-import { markInCustomReplication } from '../../lib/helpers/cls-db-replication.helper';
+import { CustomMongoQueryRunner } from '../../lib/drivers/mongo-query-runner.js';
+import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant.js';
+import { CLS_DB_REPLICATION_NAMESPACE } from '../../lib/constants/cls-replication.constant.js';
+import { markInTransaction, setCurrentTransactionSession } from '../../lib/helpers/cls-db-transaction.helper.js';
+import { markInCustomReplication } from '../../lib/helpers/cls-db-replication.helper.js';
 
 function createRunner(): CustomMongoQueryRunner {
     return Object.create(CustomMongoQueryRunner.prototype) as CustomMongoQueryRunner;
@@ -88,7 +89,7 @@ describe('CustomMongoQueryRunner', () => {
         it.each(cases)(
             '%s injects the resolved options and forwards to the parent',
             async (method, argsBeforeOptions, parentMethod) => {
-                const spy = jest
+                const spy = vi
                     .spyOn(MongoQueryRunner.prototype as any, parentMethod)
                     .mockResolvedValue('result' as never);
                 const runner = createRunner();
@@ -107,7 +108,7 @@ describe('CustomMongoQueryRunner', () => {
         );
 
         it('bulkWrite resolves options and forwards to the parent bulkWrite', async () => {
-            const spy = jest.spyOn(MongoQueryRunner.prototype as any, 'bulkWrite').mockResolvedValue('bulk' as never);
+            const spy = vi.spyOn(MongoQueryRunner.prototype as any, 'bulkWrite').mockResolvedValue('bulk' as never);
             const runner = createRunner();
             const operations = [{ insertOne: { document: { a: 1 } } }];
 
@@ -128,8 +129,8 @@ describe('CustomMongoQueryRunner', () => {
     describe('methods that operate on the collection directly', () => {
         it('cursor calls find on the collection with the resolved options', () => {
             const runner = createRunner();
-            const find = jest.fn().mockReturnValue('cursor');
-            jest.spyOn(runner as any, 'getCollection').mockReturnValue({ find });
+            const find = vi.fn().mockReturnValue('cursor');
+            vi.spyOn(runner as any, 'getCollection').mockReturnValue({ find });
 
             const filter = { name: 'x' };
             const result = runner.cursor('col', filter as any);
@@ -140,8 +141,8 @@ describe('CustomMongoQueryRunner', () => {
 
         it('cursor defaults the filter to an empty object', () => {
             const runner = createRunner();
-            const find = jest.fn().mockReturnValue('cursor');
-            jest.spyOn(runner as any, 'getCollection').mockReturnValue({ find });
+            const find = vi.fn().mockReturnValue('cursor');
+            vi.spyOn(runner as any, 'getCollection').mockReturnValue({ find });
 
             runner.cursor('col', undefined as any);
 
@@ -150,8 +151,8 @@ describe('CustomMongoQueryRunner', () => {
 
         it('initializeOrderedBulkOp passes resolved options to the collection', () => {
             const runner = createRunner();
-            const initializeOrderedBulkOp = jest.fn().mockReturnValue('ordered');
-            jest.spyOn(runner as any, 'getCollection').mockReturnValue({ initializeOrderedBulkOp });
+            const initializeOrderedBulkOp = vi.fn().mockReturnValue('ordered');
+            vi.spyOn(runner as any, 'getCollection').mockReturnValue({ initializeOrderedBulkOp });
 
             expect(runner.initializeOrderedBulkOp('col')).toBe('ordered');
             expect(initializeOrderedBulkOp).toHaveBeenCalledWith({});
@@ -159,8 +160,8 @@ describe('CustomMongoQueryRunner', () => {
 
         it('initializeUnorderedBulkOp passes resolved options to the collection', () => {
             const runner = createRunner();
-            const initializeUnorderedBulkOp = jest.fn().mockReturnValue('unordered');
-            jest.spyOn(runner as any, 'getCollection').mockReturnValue({ initializeUnorderedBulkOp });
+            const initializeUnorderedBulkOp = vi.fn().mockReturnValue('unordered');
+            vi.spyOn(runner as any, 'getCollection').mockReturnValue({ initializeUnorderedBulkOp });
 
             expect(runner.initializeUnorderedBulkOp('col')).toBe('unordered');
             expect(initializeUnorderedBulkOp).toHaveBeenCalledWith({});

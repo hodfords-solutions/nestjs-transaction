@@ -1,23 +1,24 @@
 import 'reflect-metadata';
+import { describe, it, expect, vi, Mock } from 'vitest';
 import { DriverUtils } from 'typeorm/driver/DriverUtils';
-import { CustomMongoDriver } from '../../lib/drivers/mongo.driver';
-import { CustomMongoQueryRunner } from '../../lib/drivers/mongo-query-runner';
+import { CustomMongoDriver } from '../../lib/drivers/mongo.driver.js';
+import { CustomMongoQueryRunner } from '../../lib/drivers/mongo-query-runner.js';
 
 describe('CustomMongoDriver', () => {
     it('connects with a CustomMongoQueryRunner and binds the connection manager', async () => {
         const client = { kind: 'mongo-client' };
         const manager = { kind: 'manager' };
 
-        jest.spyOn(DriverUtils, 'buildMongoDBDriverOptions').mockReturnValue({} as any);
+        vi.spyOn(DriverUtils, 'buildMongoDBDriverOptions').mockReturnValue({} as any);
 
         const driver = Object.create(CustomMongoDriver.prototype) as any;
         driver.options = {};
         driver.dataSource = { manager };
         driver.mongodb = {
-            MongoClient: { connect: jest.fn().mockResolvedValue(client) }
+            MongoClient: { connect: vi.fn().mockResolvedValue(client) }
         };
-        driver.buildConnectionUrl = jest.fn().mockReturnValue('mongodb://localhost');
-        driver.buildConnectionOptions = jest.fn().mockReturnValue({ useUnifiedTopology: true });
+        driver.buildConnectionUrl = vi.fn().mockReturnValue('mongodb://localhost');
+        driver.buildConnectionOptions = vi.fn().mockReturnValue({ useUnifiedTopology: true });
 
         await driver.connect();
 
@@ -27,6 +28,6 @@ describe('CustomMongoDriver', () => {
         expect(driver.queryRunner).toBeInstanceOf(CustomMongoQueryRunner);
         expect(driver.queryRunner.manager).toBe(manager);
 
-        (DriverUtils.buildMongoDBDriverOptions as jest.Mock).mockRestore();
+        (DriverUtils.buildMongoDBDriverOptions as Mock).mockRestore();
     });
 });

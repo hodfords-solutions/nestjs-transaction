@@ -1,5 +1,5 @@
-import { DriverFactory } from 'typeorm/driver/DriverFactory';
-import { CustomMongoDriver } from '../drivers/mongo.driver';
+import { DriverFactory } from 'typeorm/driver/DriverFactory.js';
+import { CustomMongoDriver } from '../drivers/mongo.driver.js';
 import { DataSource } from 'typeorm';
 
 const rawDriverCreate = DriverFactory.prototype.create;

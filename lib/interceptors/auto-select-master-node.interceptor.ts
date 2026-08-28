@@ -1,12 +1,12 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { RUNNING_IN_TRANSACTION_WATERMARK } from '../constants/cls-transaction.constant';
-import { runInReplication } from '../helpers/run-in-replication.helper';
+import { RUNNING_IN_TRANSACTION_WATERMARK } from '../constants/cls-transaction.constant.js';
+import { runInReplication } from '../helpers/run-in-replication.helper.js';
 import {
     CLS_DB_REPLICATION_NAMESPACE,
     RUNNING_IN_REPLICATION_MODE_WATERMARK
-} from '../constants/cls-replication.constant';
+} from '../constants/cls-replication.constant.js';
 
 @Injectable()
 export class AutoSelectMasterNodeInterceptor implements NestInterceptor {

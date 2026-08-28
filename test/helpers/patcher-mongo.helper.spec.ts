@@ -1,9 +1,10 @@
 import 'reflect-metadata';
+import { describe, it, expect } from 'vitest';
 import { DriverFactory } from 'typeorm/driver/DriverFactory';
 import { PostgresDriver } from 'typeorm/driver/postgres/PostgresDriver';
 // Importing the helper patches DriverFactory.prototype.create as a side effect.
-import '../../lib/helpers/patcher-mongo.helper';
-import { CustomMongoDriver } from '../../lib/drivers/mongo.driver';
+import '../../lib/helpers/patcher-mongo.helper.js';
+import { CustomMongoDriver } from '../../lib/drivers/mongo.driver.js';
 
 describe('patcher-mongo.helper', () => {
     it('creates a CustomMongoDriver for mongodb connections', () => {

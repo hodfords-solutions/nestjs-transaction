@@ -1,5 +1,5 @@
 import { Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
-import { PostService } from './post.service';
+import { PostService } from './post.service.js';
 import { DataSource } from 'typeorm';
 import { UseSlaveNode, Transactional, UseMasterNode } from '@hodfords/nestjs-transaction';
 

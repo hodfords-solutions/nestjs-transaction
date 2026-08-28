@@ -1,4 +1,4 @@
-import { MongoQueryRunner } from 'typeorm/driver/mongodb/MongoQueryRunner';
+import { MongoQueryRunner } from 'typeorm/driver/mongodb/MongoQueryRunner.js';
 import {
     AggregateOptions,
     AggregationCursor,
@@ -26,9 +26,9 @@ import {
     UpdateOptions,
     UnorderedBulkOperation,
     OrderedBulkOperation
-} from 'typeorm/driver/mongodb/typings';
-import { getCurrentTransactionSession, isInTransaction } from '../helpers/cls-db-transaction.helper';
-import { getCustomReplicationMode } from '../helpers/cls-db-replication.helper';
+} from 'typeorm/driver/mongodb/typings.js';
+import { getCurrentTransactionSession, isInTransaction } from '../helpers/cls-db-transaction.helper.js';
+import { getCustomReplicationMode } from '../helpers/cls-db-replication.helper.js';
 
 export class CustomMongoQueryRunner extends MongoQueryRunner {
     getOptions<T>(options?: T): T {

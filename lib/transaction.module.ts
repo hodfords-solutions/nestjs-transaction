@@ -1,7 +1,7 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { AutoSelectMasterNodeInterceptor } from './interceptors/auto-select-master-node.interceptor';
-import { TransactionOption } from './types/transaction-option.type';
+import { AutoSelectMasterNodeInterceptor } from './interceptors/auto-select-master-node.interceptor.js';
+import { TransactionOption } from './types/transaction-option.type.js';
 
 @Module({})
 export class TransactionModule {

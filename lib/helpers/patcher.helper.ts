@@ -7,10 +7,10 @@ import {
     Repository,
     SelectQueryBuilder
 } from 'typeorm';
-import { getCurrentTransactionManager, isInTransaction } from './cls-db-transaction.helper';
-import { BaseQueryRunner } from 'typeorm/query-runner/BaseQueryRunner';
-import { getCustomReplicationMode } from './cls-db-replication.helper';
-import { PostgresQueryRunner } from 'typeorm/driver/postgres/PostgresQueryRunner';
+import { getCurrentTransactionManager, isInTransaction } from './cls-db-transaction.helper.js';
+import { BaseQueryRunner } from 'typeorm/query-runner/BaseQueryRunner.js';
+import { getCustomReplicationMode } from './cls-db-replication.helper.js';
+import { PostgresQueryRunner } from 'typeorm/driver/postgres/PostgresQueryRunner.js';
 
 function patchManager(repositoryType: unknown) {
     Object.defineProperty(repositoryType, 'manager', {

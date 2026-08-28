@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
-import { PostService } from './post.service';
-import { CreatePostDto } from './post.dto';
+import { PostService } from './post.service.js';
+import { CreatePostDto } from './post.dto.js';
 import { DataSource } from 'typeorm';
 import { UseMasterNode, UseSlaveNode, Transactional } from '@hodfords/nestjs-transaction';
 

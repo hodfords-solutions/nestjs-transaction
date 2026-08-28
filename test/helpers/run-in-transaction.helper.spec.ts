@@ -1,25 +1,26 @@
 import 'reflect-metadata';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-const getDataSourceMock = jest.fn();
-jest.mock('@hodfords/typeorm-helper', () => ({
+const { getDataSourceMock } = vi.hoisted(() => ({ getDataSourceMock: vi.fn() }));
+vi.mock('@hodfords/typeorm-helper', () => ({
     getDataSource: () => getDataSourceMock()
 }));
 
-import { runInTransaction, runInMongoTransaction } from '../../lib/helpers/run-in-transaction.helper';
-import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant';
+import { runInTransaction, runInMongoTransaction } from '../../lib/helpers/run-in-transaction.helper.js';
+import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant.js';
 import {
     getCurrentTransactionManager,
     getCurrentTransactionSession,
     isInTransaction,
     markInTransaction
-} from '../../lib/helpers/cls-db-transaction.helper';
-import { runAfterTransactionCommit } from '../../lib/helpers/run-after-transaction-commit.helper';
+} from '../../lib/helpers/cls-db-transaction.helper.js';
+import { runAfterTransactionCommit } from '../../lib/helpers/run-after-transaction-commit.helper.js';
 
 function buildRdbmsDataSource(manager: any = { id: 'manager' }) {
     return {
         manager,
         options: { type: 'postgres' },
-        transaction: jest.fn(async (isolationOrCb: any, maybeCb?: any) => {
+        transaction: vi.fn(async (isolationOrCb: any, maybeCb?: any) => {
             const cb = typeof isolationOrCb === 'function' ? isolationOrCb : maybeCb;
             return cb(manager);
         })
@@ -28,17 +29,17 @@ function buildRdbmsDataSource(manager: any = { id: 'manager' }) {
 
 function buildMongoSession() {
     return {
-        startTransaction: jest.fn(),
-        commitTransaction: jest.fn().mockResolvedValue(undefined),
-        abortTransaction: jest.fn().mockResolvedValue(undefined),
-        endSession: jest.fn().mockResolvedValue(undefined)
+        startTransaction: vi.fn(),
+        commitTransaction: vi.fn().mockResolvedValue(undefined),
+        abortTransaction: vi.fn().mockResolvedValue(undefined),
+        endSession: vi.fn().mockResolvedValue(undefined)
     };
 }
 
 function buildMongoDataSource(session: any, manager: any = {}) {
     manager.mongoQueryRunner = {
         databaseConnection: {
-            startSession: jest.fn(() => session)
+            startSession: vi.fn(() => session)
         }
     };
     return {
@@ -54,7 +55,7 @@ beforeEach(() => {
 // eslint-disable-next-line max-lines-per-function
 describe('runInTransaction', () => {
     it('runs the callback directly when already in a transaction', async () => {
-        const fn = jest.fn().mockReturnValue('inner');
+        const fn = vi.fn().mockReturnValue('inner');
 
         const result = await CLS_DB_TRANSACTION_NAMESPACE.run(async () => {
             markInTransaction();
@@ -74,7 +75,7 @@ describe('runInTransaction', () => {
 
         let managerInside: any;
         let inTransactionInside: boolean | undefined;
-        const fn = jest.fn(() => {
+        const fn = vi.fn(() => {
             managerInside = getCurrentTransactionManager();
             inTransactionInside = isInTransaction();
             return 'ok';
@@ -92,7 +93,7 @@ describe('runInTransaction', () => {
         const dataSource = buildRdbmsDataSource();
         getDataSourceMock.mockReturnValue(dataSource);
 
-        await runInTransaction(jest.fn(), { isolationLevel: 'SERIALIZABLE' });
+        await runInTransaction(vi.fn(), { isolationLevel: 'SERIALIZABLE' });
 
         expect(dataSource.transaction).toHaveBeenCalledWith('SERIALIZABLE', expect.any(Function));
     });
@@ -101,7 +102,7 @@ describe('runInTransaction', () => {
         const dataSource = buildRdbmsDataSource();
         getDataSourceMock.mockReturnValue(dataSource);
 
-        await runInTransaction(jest.fn().mockReturnValue('ok'), undefined as any);
+        await runInTransaction(vi.fn().mockReturnValue('ok'), undefined as any);
 
         expect(dataSource.transaction).toHaveBeenCalledWith(undefined, expect.any(Function));
     });
@@ -110,7 +111,7 @@ describe('runInTransaction', () => {
         const dataSource = buildRdbmsDataSource();
         getDataSourceMock.mockReturnValue(dataSource);
 
-        const hook = jest.fn().mockResolvedValue(undefined);
+        const hook = vi.fn().mockResolvedValue(undefined);
         let managerDuring: any;
 
         await runInTransaction(() => {
@@ -142,7 +143,7 @@ describe('runInTransaction', () => {
 
         let sessionInside: any;
         let managerInside: any;
-        const fn = jest.fn(() => {
+        const fn = vi.fn(() => {
             sessionInside = getCurrentTransactionSession();
             managerInside = getCurrentTransactionManager();
             return 'mongo-result';
@@ -165,7 +166,7 @@ describe('runInMongoTransaction', () => {
         const manager: any = {};
         getDataSourceMock.mockReturnValue(buildMongoDataSource(session, manager));
 
-        const fn = jest.fn().mockResolvedValue('done');
+        const fn = vi.fn().mockResolvedValue('done');
         const result = await runInMongoTransaction(fn, {});
 
         expect(result).toBe('done');

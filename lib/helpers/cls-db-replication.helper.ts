@@ -1,4 +1,4 @@
-import { CLS_DB_REPLICATION_MODE_KEY, CLS_DB_REPLICATION_NAMESPACE } from '../constants/cls-replication.constant';
+import { CLS_DB_REPLICATION_MODE_KEY, CLS_DB_REPLICATION_NAMESPACE } from '../constants/cls-replication.constant.js';
 import { ReplicationMode } from 'typeorm';
 
 export function markInCustomReplication(mode: ReplicationMode): void {

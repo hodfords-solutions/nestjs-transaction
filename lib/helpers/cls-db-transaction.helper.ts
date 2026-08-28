@@ -4,8 +4,8 @@ import {
     CLS_DB_TRANSACTION_MANAGER_KEY,
     CLS_DB_TRANSACTION_NAMESPACE,
     CLS_DB_TRANSACTION_SESSION_KEY
-} from '../constants/cls-transaction.constant';
-import { TransactionHook } from '../types/transaction-hook.type';
+} from '../constants/cls-transaction.constant.js';
+import { TransactionHook } from '../types/transaction-hook.type.js';
 
 export function markInTransaction(): void {
     CLS_DB_TRANSACTION_NAMESPACE.set(CLS_DB_IS_IN_TRANSACTION_KEY, true);

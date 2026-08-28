@@ -1,5 +1,6 @@
 import 'reflect-metadata';
-import { cloneMetadata, cloneMethodAndMoveMetadata, moveMetadata } from '../../lib/helpers/metadata.helper';
+import { describe, it, expect } from 'vitest';
+import { cloneMetadata, cloneMethodAndMoveMetadata, moveMetadata } from '../../lib/helpers/metadata.helper.js';
 
 // eslint-disable-next-line max-lines-per-function
 describe('metadata.helper', () => {

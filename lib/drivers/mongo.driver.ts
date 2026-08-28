@@ -1,7 +1,7 @@
-import { MongoDriver } from 'typeorm/driver/mongodb/MongoDriver';
-import { DriverUtils } from 'typeorm/driver/DriverUtils';
-import { ObjectUtils } from 'typeorm/util/ObjectUtils';
-import { CustomMongoQueryRunner } from './mongo-query-runner';
+import { MongoDriver } from 'typeorm/driver/mongodb/MongoDriver.js';
+import { DriverUtils } from 'typeorm/driver/DriverUtils.js';
+import { ObjectUtils } from 'typeorm/util/ObjectUtils.js';
+import { CustomMongoQueryRunner } from './mongo-query-runner.js';
 
 export class CustomMongoDriver extends MongoDriver {
     /**

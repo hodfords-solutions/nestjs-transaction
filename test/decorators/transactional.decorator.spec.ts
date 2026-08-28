@@ -1,14 +1,17 @@
 import 'reflect-metadata';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-const runInTransactionMock = jest.fn((fn: any, option?: any) => fn());
-jest.mock('../../lib/helpers/run-in-transaction.helper', () => ({
+const { runInTransactionMock } = vi.hoisted(() => ({ runInTransactionMock: vi.fn((fn: any, option?: any) => fn()) }));
+vi.mock('../../lib/helpers/run-in-transaction.helper.js', () => ({
     runInTransaction: (fn: any, option: any) => runInTransactionMock(fn, option)
 }));
 
-import { Transactional } from '../../lib/decorators/transactional.decorator';
-import { RUNNING_IN_TRANSACTION_WATERMARK } from '../../lib/constants/cls-transaction.constant';
+import { Transactional } from '../../lib/decorators/transactional.decorator.js';
+import { RUNNING_IN_TRANSACTION_WATERMARK } from '../../lib/constants/cls-transaction.constant.js';
 
-beforeEach(() => runInTransactionMock.mockClear());
+beforeEach(() => {
+    runInTransactionMock.mockClear();
+});
 
 // eslint-disable-next-line max-lines-per-function
 describe('@Transactional', () => {

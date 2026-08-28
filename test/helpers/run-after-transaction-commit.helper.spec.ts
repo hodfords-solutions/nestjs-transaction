@@ -1,11 +1,12 @@
 import 'reflect-metadata';
-import { runAfterTransactionCommit } from '../../lib/helpers/run-after-transaction-commit.helper';
-import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant';
-import { getTransactionCommitHooks, markInTransaction } from '../../lib/helpers/cls-db-transaction.helper';
+import { describe, it, expect, vi } from 'vitest';
+import { runAfterTransactionCommit } from '../../lib/helpers/run-after-transaction-commit.helper.js';
+import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant.js';
+import { getTransactionCommitHooks, markInTransaction } from '../../lib/helpers/cls-db-transaction.helper.js';
 
 describe('runAfterTransactionCommit', () => {
     it('executes the function immediately when not in a transaction', async () => {
-        const fn = jest.fn().mockReturnValue('result');
+        const fn = vi.fn().mockReturnValue('result');
 
         const result = await CLS_DB_TRANSACTION_NAMESPACE.run(async () => runAfterTransactionCommit(fn));
 
@@ -14,7 +15,7 @@ describe('runAfterTransactionCommit', () => {
     });
 
     it('executes immediately when there is no CLS context at all', () => {
-        const fn = jest.fn().mockReturnValue(42);
+        const fn = vi.fn().mockReturnValue(42);
 
         const result = runAfterTransactionCommit(fn);
 
@@ -23,7 +24,7 @@ describe('runAfterTransactionCommit', () => {
     });
 
     it('defers the function as a commit hook when inside a transaction', async () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
 
         await CLS_DB_TRANSACTION_NAMESPACE.run(async () => {
             markInTransaction();

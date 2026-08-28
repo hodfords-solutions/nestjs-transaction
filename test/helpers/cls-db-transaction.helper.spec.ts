@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { describe, it, expect, vi } from 'vitest';
 import {
     addTransactionCommitHook,
     getCurrentTransactionManager,
@@ -9,8 +10,8 @@ import {
     markOutOfTransaction,
     setCurrentTransactionManager,
     setCurrentTransactionSession
-} from '../../lib/helpers/cls-db-transaction.helper';
-import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant';
+} from '../../lib/helpers/cls-db-transaction.helper.js';
+import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant.js';
 
 const runInContext = <T>(fn: () => T): Promise<T> => CLS_DB_TRANSACTION_NAMESPACE.run(async () => fn());
 
@@ -81,7 +82,7 @@ describe('cls-db-transaction.helper', () => {
         });
 
         it('adds a hook with executed set to false', async () => {
-            const fn = jest.fn();
+            const fn = vi.fn();
             await runInContext(() => {
                 addTransactionCommitHook(fn);
                 const hooks = getTransactionCommitHooks();
@@ -92,8 +93,8 @@ describe('cls-db-transaction.helper', () => {
         });
 
         it('accumulates multiple hooks in registration order', async () => {
-            const first = jest.fn();
-            const second = jest.fn();
+            const first = vi.fn();
+            const second = vi.fn();
             await runInContext(() => {
                 addTransactionCommitHook(first);
                 addTransactionCommitHook(second);
@@ -102,7 +103,7 @@ describe('cls-db-transaction.helper', () => {
         });
 
         it('wraps the registered function so invoking it calls the original', async () => {
-            const fn = jest.fn().mockResolvedValue('done');
+            const fn = vi.fn().mockResolvedValue('done');
             await runInContext(async () => {
                 addTransactionCommitHook(fn);
                 const [hook] = getTransactionCommitHooks();

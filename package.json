@@ -1,11 +1,11 @@
 {
     "name": "@hodfords/nestjs-transaction",
-    "version": "11.4.2",
+    "version": "12.0.0",
     "description": "Manages database transactions in NestJS applications",
-    "main": "index.js",
+    "main": "./index.js",
     "scripts": {
         "prebuild": "rimraf dist",
-        "build": "tsc",
+        "build": "tsc -p tsconfig.build.json",
         "cspell": "cspell",
         "format": "prettier --write \"sample/**/*.ts\" \"lib/**/*.ts\"",
         "postbuild": "cp package.json dist/lib && cp README.md dist/lib && cp .npmrc dist/lib",
@@ -17,11 +17,9 @@
         "start": "nest start",
         "start:debug": "nest start --debug --watch",
         "start:dev": "npm run prebuild && nest start --watch",
-        "test": "jest",
-        "test:cov": "jest --coverage",
-        "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-        "test:e2e": "jest --config ./test/jest-e2e.json",
-        "test:watch": "jest --watch"
+        "test": "vitest run",
+        "test:cov": "vitest run --coverage",
+        "test:watch": "vitest"
     },
     "repository": {
         "type": "git",
@@ -35,18 +33,19 @@
     },
     "homepage": "https://github.com/hodfords-solutions/nestjs-transaction#readme",
     "devDependencies": {
-        "@hodfords/nestjs-eslint-config": "11.0.1",
-        "@hodfords/nestjs-prettier-config": "11.0.1",
-        "@hodfords/typeorm-helper": "11.2.0",
-        "@nestjs/cli": "11.0.2",
-        "@nestjs/common": "11.0.11",
-        "@nestjs/core": "11.0.11",
-        "@nestjs/platform-express": "11.0.11",
-        "@nestjs/swagger": "^11.2.0",
-        "@nestjs/testing": "^11.1.27",
-        "@nestjs/typeorm": "11.0.2",
+        "@hodfords/nestjs-eslint-config": "^11.0.4",
+        "@hodfords/nestjs-prettier-config": "^11.0.2",
+        "@hodfords/typeorm-helper": "12.0.0",
+        "@nestjs/cli": "12.0.0",
+        "@nestjs/common": "12.0.1",
+        "@nestjs/core": "12.0.1",
+        "@nestjs/platform-express": "12.0.1",
+        "@nestjs/swagger": "12.0.0",
+        "@nestjs/testing": "12.0.1",
+        "@nestjs/typeorm": "12.0.1",
+        "@swc/core": "^1.13.5",
         "@types/lodash": "4.17.16",
-        "@types/node": "22.13.10",
+        "@types/node": "25.2.0",
         "class-transformer": "0.5.1",
         "class-validator": "0.14.1",
         "commander": "13.1.0",
@@ -54,7 +53,6 @@
         "eslint": "9.22.0",
         "husky": "9.1.7",
         "is-ci": "4.1.0",
-        "jest": "^30.4.2",
         "lint-staged": "15.5.0",
         "lodash": "4.17.21",
         "mongodb": "7.3.0",
@@ -64,10 +62,10 @@
         "reflect-metadata": "0.2.2",
         "rimraf": "6.0.1",
         "rxjs": "7.8.2",
-        "ts-jest": "^29.4.11",
-        "ts-node": "^10.9.2",
-        "typeorm": "1.0.0",
-        "typescript": "5.8.2"
+        "typeorm": "1.1.0",
+        "typescript": "5.9.3",
+        "unplugin-swc": "^1.5.7",
+        "vitest": "^4.1.10"
     },
     "dependencies": {
         "nestjs-cls": "*"
@@ -77,5 +75,24 @@
     },
     "optionalDependencies": {
         "mongodb": "^7.0.0"
+    },
+    "type": "module",
+    "types": "./index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./index.d.ts",
+            "import": "./index.js",
+            "default": "./index.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "engines": {
+        "node": ">=20.19.0"
+    },
+    "overrides": {
+        "nestjs-cls": {
+            "@nestjs/common": "$@nestjs/common",
+            "@nestjs/core": "$@nestjs/core"
+        }
     }
 }
