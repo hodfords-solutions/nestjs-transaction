@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/
 import { PostService } from './post.service.js';
 import { CreatePostDto } from './post.dto.js';
 import { DataSource } from 'typeorm';
-import { UseMasterNode, UseSlaveNode, Transactional } from '@hodfords/nestjs-transaction';
+import { UseMasterNode, UseSlaveNode, Transactional } from '../../../lib/index.js';
 
 @Controller('posts')
 export class PostController {
