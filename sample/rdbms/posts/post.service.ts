@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { CreatePostDto } from './post.dto';
-import { PostEntity } from './post.entity';
-import { PostRepository } from './post.repository';
+import { CreatePostDto } from './post.dto.js';
+import { PostEntity } from './post.entity.js';
+import { PostRepository } from './post.repository.js';
 import { getDataSource } from '@hodfords/typeorm-helper';
 import { runAfterTransactionCommit, Transactional } from '@hodfords/nestjs-transaction';
 

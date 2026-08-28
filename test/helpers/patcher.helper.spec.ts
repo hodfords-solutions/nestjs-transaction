@@ -1,12 +1,13 @@
 import 'reflect-metadata';
+import { describe, it, expect, vi } from 'vitest';
 import { DataSource, Repository, MongoRepository, SelectQueryBuilder } from 'typeorm';
 import { BaseQueryRunner } from 'typeorm/query-runner/BaseQueryRunner';
 // Importing the helper applies the prototype patches as a side effect.
-import '../../lib/helpers/patcher.helper';
-import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant';
-import { CLS_DB_REPLICATION_NAMESPACE } from '../../lib/constants/cls-replication.constant';
-import { markInTransaction, setCurrentTransactionManager } from '../../lib/helpers/cls-db-transaction.helper';
-import { markInCustomReplication } from '../../lib/helpers/cls-db-replication.helper';
+import '../../lib/helpers/patcher.helper.js';
+import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant.js';
+import { CLS_DB_REPLICATION_NAMESPACE } from '../../lib/constants/cls-replication.constant.js';
+import { markInTransaction, setCurrentTransactionManager } from '../../lib/helpers/cls-db-transaction.helper.js';
+import { markInCustomReplication } from '../../lib/helpers/cls-db-replication.helper.js';
 
 // eslint-disable-next-line max-lines-per-function
 describe('patcher.helper', () => {
@@ -81,8 +82,8 @@ describe('patcher.helper', () => {
     describe('patched DataSource.query', () => {
         it('injects the current transaction query runner when none is provided', async () => {
             const dataSource = Object.create(DataSource.prototype);
-            const query = jest.fn().mockResolvedValue('rows');
-            const release = jest.fn();
+            const query = vi.fn().mockResolvedValue('rows');
+            const release = vi.fn();
             const queryRunner = { isReleased: false, query, release };
 
             const result = await CLS_DB_TRANSACTION_NAMESPACE.run(async () => {
@@ -101,8 +102,8 @@ describe('patcher.helper', () => {
     describe('patched DataSource.createQueryRunner', () => {
         function buildDataSource() {
             const dataSource = Object.create(DataSource.prototype);
-            dataSource.driver = { createQueryRunner: jest.fn((mode: string) => ({ mode })) };
-            dataSource.createEntityManager = jest.fn(() => ({ id: 'entity-manager' }));
+            dataSource.driver = { createQueryRunner: vi.fn((mode: string) => ({ mode })) };
+            dataSource.createEntityManager = vi.fn(() => ({ id: 'entity-manager' }));
             return dataSource;
         }
 

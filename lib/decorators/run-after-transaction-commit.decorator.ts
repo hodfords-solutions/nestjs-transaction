@@ -1,5 +1,5 @@
-import { runAfterTransactionCommit } from '../helpers/run-after-transaction-commit.helper';
-import { cloneMethodAndMoveMetadata } from '../helpers/metadata.helper';
+import { runAfterTransactionCommit } from '../helpers/run-after-transaction-commit.helper.js';
+import { cloneMethodAndMoveMetadata } from '../helpers/metadata.helper.js';
 
 export function RunAfterTransactionCommit(): MethodDecorator {
     return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {

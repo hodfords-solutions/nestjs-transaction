@@ -1,14 +1,15 @@
 import 'reflect-metadata';
-import { runInReplication } from '../../lib/helpers/run-in-replication.helper';
-import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant';
-import { CLS_DB_REPLICATION_NAMESPACE } from '../../lib/constants/cls-replication.constant';
-import { markInTransaction } from '../../lib/helpers/cls-db-transaction.helper';
-import { getCustomReplicationMode, markInCustomReplication } from '../../lib/helpers/cls-db-replication.helper';
+import { describe, it, expect, vi } from 'vitest';
+import { runInReplication } from '../../lib/helpers/run-in-replication.helper.js';
+import { CLS_DB_TRANSACTION_NAMESPACE } from '../../lib/constants/cls-transaction.constant.js';
+import { CLS_DB_REPLICATION_NAMESPACE } from '../../lib/constants/cls-replication.constant.js';
+import { markInTransaction } from '../../lib/helpers/cls-db-transaction.helper.js';
+import { getCustomReplicationMode, markInCustomReplication } from '../../lib/helpers/cls-db-replication.helper.js';
 
 describe('runInReplication', () => {
     it('opens a new replication context and marks the requested mode', async () => {
         let observedMode: string | undefined;
-        const fn = jest.fn(() => {
+        const fn = vi.fn(() => {
             observedMode = getCustomReplicationMode();
             return 'value';
         });
@@ -21,7 +22,7 @@ describe('runInReplication', () => {
     });
 
     it('runs the function directly without re-marking when already in a transaction', async () => {
-        const fn = jest.fn(() => getCustomReplicationMode());
+        const fn = vi.fn(() => getCustomReplicationMode());
 
         const result = await CLS_DB_TRANSACTION_NAMESPACE.run(async () => {
             markInTransaction();
@@ -34,7 +35,7 @@ describe('runInReplication', () => {
     });
 
     it('does not override the existing mode when already in custom replication', async () => {
-        const fn = jest.fn(() => getCustomReplicationMode());
+        const fn = vi.fn(() => getCustomReplicationMode());
 
         const result = await CLS_DB_REPLICATION_NAMESPACE.run(async () => {
             markInCustomReplication('slave');

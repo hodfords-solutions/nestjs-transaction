@@ -1,7 +1,8 @@
 import 'reflect-metadata';
+import { describe, it, expect } from 'vitest';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { TransactionModule } from '../lib/transaction.module';
-import { AutoSelectMasterNodeInterceptor } from '../lib/interceptors/auto-select-master-node.interceptor';
+import { TransactionModule } from '../lib/transaction.module.js';
+import { AutoSelectMasterNodeInterceptor } from '../lib/interceptors/auto-select-master-node.interceptor.js';
 
 describe('TransactionModule.forRoot', () => {
     it('returns a dynamic module bound to TransactionModule with no providers by default', () => {

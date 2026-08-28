@@ -1,7 +1,7 @@
-import { RUNNING_IN_TRANSACTION_WATERMARK } from '../constants/cls-transaction.constant';
-import { runInTransaction } from '../helpers/run-in-transaction.helper';
-import { TransactionalOption } from '../types/transactional-option.type';
-import { cloneMethodAndMoveMetadata } from '../helpers/metadata.helper';
+import { RUNNING_IN_TRANSACTION_WATERMARK } from '../constants/cls-transaction.constant.js';
+import { runInTransaction } from '../helpers/run-in-transaction.helper.js';
+import { TransactionalOption } from '../types/transactional-option.type.js';
+import { cloneMethodAndMoveMetadata } from '../helpers/metadata.helper.js';
 
 export function Transactional(option: TransactionalOption = {}): MethodDecorator {
     return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {

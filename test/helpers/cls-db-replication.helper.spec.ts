@@ -1,10 +1,11 @@
 import 'reflect-metadata';
+import { describe, it, expect } from 'vitest';
 import {
     getCustomReplicationMode,
     isInCustomReplication,
     markInCustomReplication
-} from '../../lib/helpers/cls-db-replication.helper';
-import { CLS_DB_REPLICATION_NAMESPACE } from '../../lib/constants/cls-replication.constant';
+} from '../../lib/helpers/cls-db-replication.helper.js';
+import { CLS_DB_REPLICATION_NAMESPACE } from '../../lib/constants/cls-replication.constant.js';
 
 const runInContext = <T>(fn: () => T): Promise<T> => CLS_DB_REPLICATION_NAMESPACE.run(async () => fn());
 

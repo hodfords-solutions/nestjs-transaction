@@ -1,13 +1,18 @@
 import 'reflect-metadata';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-const runAfterTransactionCommitMock = jest.fn((fn: any) => fn());
-jest.mock('../../lib/helpers/run-after-transaction-commit.helper', () => ({
+const { runAfterTransactionCommitMock } = vi.hoisted(() => ({
+    runAfterTransactionCommitMock: vi.fn((fn: any) => fn())
+}));
+vi.mock('../../lib/helpers/run-after-transaction-commit.helper.js', () => ({
     runAfterTransactionCommit: (fn: any) => runAfterTransactionCommitMock(fn)
 }));
 
-import { RunAfterTransactionCommit } from '../../lib/decorators/run-after-transaction-commit.decorator';
+import { RunAfterTransactionCommit } from '../../lib/decorators/run-after-transaction-commit.decorator.js';
 
-beforeEach(() => runAfterTransactionCommitMock.mockClear());
+beforeEach(() => {
+    runAfterTransactionCommitMock.mockClear();
+});
 
 describe('@RunAfterTransactionCommit', () => {
     it('routes the method through runAfterTransactionCommit', async () => {

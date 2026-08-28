@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PostModule } from './posts/post.module';
-import { PostEntity } from './posts/post.entity';
-import { TransactionModule } from 'lib/transaction.module';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
+import { PostModule } from './posts/post.module.js';
+import { PostEntity } from './posts/post.entity.js';
+import { TransactionModule } from '../../lib/transaction.module.js';
 import { TypeOrmHelperModule } from '@hodfords/typeorm-helper';
 
 @Module({

@@ -12,6 +12,16 @@ Install the `nestjs-transaction` package with:
 npm install @hodfords/nestjs-transaction --save
 ```
 
+> **Requirements**
+>
+> - This package is **ESM-only**. Use `import` syntax; `require()` is not supported.
+> - Node.js `>=20.19.0` (or `>=22.12`, `>=24.15`, `>=26`).
+>
+> | `@hodfords/nestjs-transaction` | NestJS |
+> | ------------------------------ | ------ |
+> | `12.x`                         | `12.x` |
+> | `11.x`                         | `11.x` |
+
 ## Usage 🚀
 
 First, you need to import the `TransactionModule` into your `AppModule` and 

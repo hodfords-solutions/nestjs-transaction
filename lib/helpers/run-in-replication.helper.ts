@@ -1,7 +1,7 @@
-import { isInTransaction } from './cls-db-transaction.helper';
-import { isInCustomReplication, markInCustomReplication } from './cls-db-replication.helper';
+import { isInTransaction } from './cls-db-transaction.helper.js';
+import { isInCustomReplication, markInCustomReplication } from './cls-db-replication.helper.js';
 import { ReplicationMode } from 'typeorm';
-import { CLS_DB_REPLICATION_NAMESPACE } from '../constants/cls-replication.constant';
+import { CLS_DB_REPLICATION_NAMESPACE } from '../constants/cls-replication.constant.js';
 
 export function runInReplication(mode: ReplicationMode, fn: any) {
     if (isInTransaction() || isInCustomReplication()) {

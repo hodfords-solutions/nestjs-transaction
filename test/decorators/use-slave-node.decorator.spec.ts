@@ -1,15 +1,18 @@
 import 'reflect-metadata';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-const runInReplicationMock = jest.fn((mode: any, fn: any) => fn());
-jest.mock('../../lib/helpers/run-in-replication.helper', () => ({
+const { runInReplicationMock } = vi.hoisted(() => ({ runInReplicationMock: vi.fn((mode: any, fn: any) => fn()) }));
+vi.mock('../../lib/helpers/run-in-replication.helper.js', () => ({
     runInReplication: (mode: any, fn: any) => runInReplicationMock(mode, fn)
 }));
 
-import { UseSlaveNode } from '../../lib/decorators/use-slave-node.decorator';
-import { RUNNING_IN_TRANSACTION_WATERMARK } from '../../lib/constants/cls-transaction.constant';
-import { RUNNING_IN_REPLICATION_MODE_WATERMARK } from '../../lib/constants/cls-replication.constant';
+import { UseSlaveNode } from '../../lib/decorators/use-slave-node.decorator.js';
+import { RUNNING_IN_TRANSACTION_WATERMARK } from '../../lib/constants/cls-transaction.constant.js';
+import { RUNNING_IN_REPLICATION_MODE_WATERMARK } from '../../lib/constants/cls-replication.constant.js';
 
-beforeEach(() => runInReplicationMock.mockClear());
+beforeEach(() => {
+    runInReplicationMock.mockClear();
+});
 
 // eslint-disable-next-line max-lines-per-function
 describe('@UseSlaveNode', () => {

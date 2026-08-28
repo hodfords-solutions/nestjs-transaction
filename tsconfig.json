@@ -1,20 +1,35 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "moduleResolution": "node",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "target": "es2023",
+        "lib": [
+            "es2023"
+        ],
         "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
         "declaration": true,
         "removeComments": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "allowSyntheticDefaultImports": true,
-        "target": "es2017",
         "sourceMap": true,
+        "skipLibCheck": true,
         "outDir": "dist",
         "baseUrl": "./",
         "incremental": true,
-      "paths": {
-        "@hodfords/nestjs-transaction": ["lib"]
-      }
-    }
+        "paths": {
+            "@hodfords/nestjs-transaction": [
+                "lib/index.ts"
+            ]
+        }
+    },
+    "include": [
+        "lib",
+        "sample",
+        "test"
+    ],
+    "exclude": [
+        "dist",
+        "node_modules"
+    ]
 }
