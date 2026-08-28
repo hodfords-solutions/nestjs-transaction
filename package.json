@@ -35,14 +35,14 @@
     "devDependencies": {
         "@hodfords/nestjs-eslint-config": "^11.0.4",
         "@hodfords/nestjs-prettier-config": "^11.0.2",
-        "@hodfords/typeorm-helper": "11.2.0",
+        "@hodfords/typeorm-helper": "12.0.0",
         "@nestjs/cli": "12.0.0",
         "@nestjs/common": "12.0.1",
         "@nestjs/core": "12.0.1",
         "@nestjs/platform-express": "12.0.1",
         "@nestjs/swagger": "12.0.0",
         "@nestjs/testing": "12.0.1",
-        "@nestjs/typeorm": "11.0.2",
+        "@nestjs/typeorm": "12.0.1",
         "@swc/core": "^1.13.5",
         "@types/lodash": "4.17.16",
         "@types/node": "25.2.0",
@@ -93,17 +93,6 @@
         "nestjs-cls": {
             "@nestjs/common": "$@nestjs/common",
             "@nestjs/core": "$@nestjs/core"
-        },
-        "@nestjs/typeorm": {
-            "@nestjs/common": "$@nestjs/common",
-            "@nestjs/core": "$@nestjs/core",
-            "typeorm": "$typeorm"
-        },
-        "@hodfords/typeorm-helper": {
-            "@nestjs/common": "$@nestjs/common",
-            "@nestjs/core": "$@nestjs/core",
-            "typeorm": "$typeorm"
-        },
-        "ioredis": "^5.8.2"
+        }
     }
 }
