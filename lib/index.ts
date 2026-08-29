@@ -6,4 +6,7 @@ export * from './decorators/use-master-node.decorator.js';
 export * from './decorators/use-slave-node.decorator.js';
 export * from './decorators/run-after-transaction-commit.decorator.js';
 export * from './types/transaction-option.type.js';
+export * from './types/transactional-option.type.js';
 export * from './helpers/run-after-transaction-commit.helper.js';
+export { runInTransaction } from './helpers/run-in-transaction.helper.js';
+export { isInTransaction } from './helpers/cls-db-transaction.helper.js';

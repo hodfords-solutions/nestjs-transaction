@@ -18,8 +18,8 @@ const runInContext = <T>(fn: () => T): Promise<T> => CLS_DB_TRANSACTION_NAMESPAC
 // eslint-disable-next-line max-lines-per-function
 describe('cls-db-transaction.helper', () => {
     describe('markInTransaction / markOutOfTransaction / isInTransaction', () => {
-        it('returns undefined when no value has been set yet', () => {
-            expect(isInTransaction()).toBeUndefined();
+        it('returns false when no value has been set yet', () => {
+            expect(isInTransaction()).toBe(false);
         });
 
         it('marks the context as in a transaction', async () => {
@@ -41,7 +41,7 @@ describe('cls-db-transaction.helper', () => {
             await runInContext(() => markInTransaction());
             // A brand new context should not see the previous flag.
             await runInContext(() => {
-                expect(isInTransaction()).toBeUndefined();
+                expect(isInTransaction()).toBe(false);
             });
         });
     });
