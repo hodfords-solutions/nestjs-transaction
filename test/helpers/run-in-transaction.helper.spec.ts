@@ -104,7 +104,7 @@ describe('runInTransaction', () => {
 
         await runInTransaction(vi.fn().mockReturnValue('ok'), undefined as any);
 
-        expect(dataSource.transaction).toHaveBeenCalledWith(undefined, expect.any(Function));
+        expect(dataSource.transaction).toHaveBeenCalledWith(expect.any(Function));
     });
 
     it('clears manager/session and runs commit hooks after a successful transaction', async () => {

@@ -5,7 +5,7 @@ import { cloneMethodAndMoveMetadata } from '../helpers/metadata.helper.js';
 export function UseMasterNode(): MethodDecorator {
     return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
         const originalMethod = descriptor.value;
-        const newMethod = async function (...args: any[]) {
+        const newMethod = async function (this: unknown, ...args: any[]) {
             if (Reflect.getMetadata(RUNNING_IN_TRANSACTION_WATERMARK, descriptor.value)) {
                 return originalMethod.call(this, ...args);
             }
