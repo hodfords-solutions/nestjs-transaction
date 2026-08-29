@@ -23,8 +23,8 @@ export function setCurrentTransactionSession(session: any): void {
     CLS_DB_TRANSACTION_NAMESPACE.set(CLS_DB_TRANSACTION_SESSION_KEY, session);
 }
 
-export function isInTransaction() {
-    return CLS_DB_TRANSACTION_NAMESPACE.get(CLS_DB_IS_IN_TRANSACTION_KEY);
+export function isInTransaction(): boolean {
+    return CLS_DB_TRANSACTION_NAMESPACE.get(CLS_DB_IS_IN_TRANSACTION_KEY) === true;
 }
 
 export function getCurrentTransactionManager() {

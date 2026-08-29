@@ -152,6 +152,45 @@ runAfterTransactionCommit(() => {
     console.log('Transaction committed successfully!');
 });
 ```
+
+#### Transaction helpers
+
+`runInTransaction` and `isInTransaction` are exported from the package root, for cases where a decorator does not fit.
+
+Use `runInTransaction` to wrap an arbitrary block of code in a transaction. If the caller is already inside a transaction, the callback simply joins it instead of opening a nested one:
+
+```typescript
+import { runInTransaction } from '@hodfords/nestjs-transaction';
+
+const post = await runInTransaction(async () => {
+    const post = await this.postRepo.createPost({ title: 'New Post' });
+    await this.auditRepo.log(post.id);
+
+    return post;
+});
+```
+
+It accepts the same options as `@Transactional`:
+
+```typescript
+await runInTransaction(async () => {
+    // ...
+}, { isolationLevel: 'SERIALIZABLE' });
+```
+
+Use `isInTransaction` to check whether the current context is already running inside a transaction. It returns `false` when there is none:
+
+```typescript
+import { isInTransaction } from '@hodfords/nestjs-transaction';
+
+async function deductBalance(userId: string, amount: number) {
+    if (!isInTransaction()) {
+        throw new Error('deductBalance must be called inside a transaction');
+    }
+    // ...
+}
+```
+
 ## License 📝
 
 This project is licensed under the MIT License

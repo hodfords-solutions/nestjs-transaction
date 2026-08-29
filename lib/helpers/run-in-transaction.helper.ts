@@ -22,12 +22,12 @@ async function runHooks(hooks: TransactionHook[]) {
     }
 }
 
-export async function runInTransaction(fn: any, option: TransactionalOption) {
+export async function runInTransaction<T>(fn: () => T | Promise<T>, option: TransactionalOption = {}): Promise<T> {
     if (isInTransaction()) {
         return fn();
     }
     return CLS_DB_TRANSACTION_NAMESPACE.run(async () => {
-        let result: any;
+        let result: T;
         try {
             const dataSource = getDataSource();
             if (dataSource.options.type === 'mongodb') {
@@ -38,7 +38,7 @@ export async function runInTransaction(fn: any, option: TransactionalOption) {
                     return fn();
                 }, option);
             } else {
-                const runInManager = (manager: EntityManager): Promise<unknown> => {
+                const runInManager = async (manager: EntityManager): Promise<T> => {
                     markInTransaction();
                     setCurrentTransactionManager(manager);
                     return fn();
@@ -61,7 +61,7 @@ export async function runInTransaction(fn: any, option: TransactionalOption) {
     });
 }
 
-export async function runInMongoTransaction(fn: any, option: TransactionalOption) {
+export async function runInMongoTransaction(fn: any, option: TransactionalOption = {}) {
     const dataSource = getDataSource();
     const manager: MongoEntityManager = dataSource.manager as MongoEntityManager;
     const session = manager.mongoQueryRunner.databaseConnection.startSession();
