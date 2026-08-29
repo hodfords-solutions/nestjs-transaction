@@ -1,4 +1,4 @@
-export function cloneMetadata<T>(source: T, target: T): void {
+export function cloneMetadata<T extends object>(source: T, target: T): void {
     const metadataKeys = Reflect.getMetadataKeys(source);
     for (const key of metadataKeys) {
         const metadataValue = Reflect.getMetadata(key, source);

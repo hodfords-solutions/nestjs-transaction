@@ -6,7 +6,7 @@ import { cloneMethodAndMoveMetadata } from '../helpers/metadata.helper.js';
 export function Transactional(option: TransactionalOption = {}): MethodDecorator {
     return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
         const originalMethod = descriptor.value;
-        const newMethod = async function (...args: any[]) {
+        const newMethod = async function (this: unknown, ...args: any[]) {
             return runInTransaction(() => {
                 return originalMethod.call(this, ...args);
             }, option);

@@ -1,10 +1,10 @@
 {
     "name": "@hodfords/nestjs-transaction",
-    "version": "12.0.1",
+    "version": "12.1.0",
     "description": "Manages database transactions in NestJS applications",
     "main": "./index.js",
     "scripts": {
-        "prebuild": "rimraf dist",
+        "prebuild": "rimraf dist *.tsbuildinfo",
         "build": "tsc -p tsconfig.build.json",
         "cspell": "cspell",
         "format": "prettier --write \"sample/**/*.ts\" \"lib/**/*.ts\"",
@@ -63,7 +63,7 @@
         "rimraf": "6.0.1",
         "rxjs": "7.8.2",
         "typeorm": "1.1.0",
-        "typescript": "5.9.3",
+        "typescript": "6.0.3",
         "unplugin-swc": "^1.5.7",
         "vitest": "^4.1.10"
     },

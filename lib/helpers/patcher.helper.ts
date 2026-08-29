@@ -2,6 +2,7 @@ import {
     DataSource,
     EntityManager,
     MongoRepository,
+    ObjectLiteral,
     QueryRunner,
     ReplicationMode,
     Repository,
@@ -56,11 +57,16 @@ const rawQueryFn = DataSource.prototype.query;
 if (rawQueryFn.length < 3) {
     throw new Error('Version of TypeORM is not supported for patching the query method.');
 }
-DataSource.prototype.query = function (...args: any[]) {
+DataSource.prototype.query = function <T = any>(
+    this: DataSource,
+    query: string,
+    parameters?: any[] | ObjectLiteral,
+    queryRunner?: QueryRunner
+): Promise<T> {
     if (isInTransaction()) {
-        args[2] = args[2] || this.manager?.queryRunner;
+        queryRunner = queryRunner || this.manager?.queryRunner;
     }
-    return rawQueryFn.apply(this, args);
+    return rawQueryFn.call(this, query, parameters, queryRunner) as Promise<T>;
 };
 
 const rawDataSourceCreateQueryRunner = DataSource.prototype.createQueryRunner;

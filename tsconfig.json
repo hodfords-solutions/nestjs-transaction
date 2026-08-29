@@ -3,9 +3,9 @@
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "target": "es2023",
-        "lib": [
-            "es2023"
-        ],
+        "strictPropertyInitialization": false,
+        "types": ["node"],
+        "lib": ["es2023"],
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "declaration": true,
@@ -15,21 +15,11 @@
         "sourceMap": true,
         "skipLibCheck": true,
         "outDir": "dist",
-        "baseUrl": "./",
         "incremental": true,
         "paths": {
-            "@hodfords/nestjs-transaction": [
-                "lib/index.ts"
-            ]
+            "@hodfords/nestjs-transaction": ["./lib/index.ts"]
         }
     },
-    "include": [
-        "lib",
-        "sample",
-        "test"
-    ],
-    "exclude": [
-        "dist",
-        "node_modules"
-    ]
+    "include": ["lib", "sample", "test"],
+    "exclude": ["dist", "node_modules"]
 }

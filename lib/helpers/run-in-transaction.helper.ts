@@ -12,7 +12,7 @@ import { runInReplication } from './run-in-replication.helper.js';
 import { CLS_DB_TRANSACTION_NAMESPACE } from '../constants/cls-transaction.constant.js';
 import { TransactionHook } from '../types/transaction-hook.type.js';
 import { TransactionalOption } from '../types/transactional-option.type.js';
-import { MongoEntityManager } from 'typeorm';
+import { EntityManager, MongoEntityManager } from 'typeorm';
 import { ClientSession } from 'mongodb';
 
 async function runHooks(hooks: TransactionHook[]) {
@@ -38,11 +38,14 @@ export async function runInTransaction(fn: any, option: TransactionalOption) {
                     return fn();
                 }, option);
             } else {
-                result = await dataSource.transaction(option?.isolationLevel, (manager) => {
+                const runInManager = (manager: EntityManager): Promise<unknown> => {
                     markInTransaction();
                     setCurrentTransactionManager(manager);
                     return fn();
-                });
+                };
+                result = option?.isolationLevel
+                    ? await dataSource.transaction(option.isolationLevel, runInManager)
+                    : await dataSource.transaction(runInManager);
             }
             markOutOfTransaction();
             setCurrentTransactionManager(null);

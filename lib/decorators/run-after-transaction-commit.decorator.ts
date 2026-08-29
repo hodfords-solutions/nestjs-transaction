@@ -4,7 +4,7 @@ import { cloneMethodAndMoveMetadata } from '../helpers/metadata.helper.js';
 export function RunAfterTransactionCommit(): MethodDecorator {
     return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
         const originalMethod = descriptor.value;
-        const newMethod = async function (...args: any[]) {
+        const newMethod = async function (this: unknown, ...args: any[]) {
             return runAfterTransactionCommit(() => originalMethod.call(this, ...args));
         };
         cloneMethodAndMoveMetadata(originalMethod, newMethod);
