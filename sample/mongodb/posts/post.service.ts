@@ -59,7 +59,7 @@ export class PostService {
 
     async createPostWithQueryRunnerAndExternalDataSource(): Promise<void> {
         this.logger.log('Creating post with queryRunner and external data source');
-        const dataSource = getDataSource();
+        const dataSource = getDataSource()!;
         const dto = {
             title: 'Post with External Data Source',
             content: 'This is a post created using an external data source.'

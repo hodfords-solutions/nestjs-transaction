@@ -15,6 +15,15 @@ import { TransactionalOption } from '../types/transactional-option.type.js';
 import { EntityManager, MongoEntityManager } from 'typeorm';
 import { ClientSession } from 'mongodb';
 
+function requireDataSource() {
+    const dataSource = getDataSource();
+    if (!dataSource) {
+        throw new Error('No data source has been registered. Make sure TransactionModule is imported.');
+    }
+
+    return dataSource;
+}
+
 async function runHooks(hooks: TransactionHook[]) {
     for (const hook of hooks.filter((h) => !h.executed)) {
         hook.executed = true;
@@ -29,7 +38,7 @@ export async function runInTransaction<T>(fn: () => T | Promise<T>, option: Tran
     return CLS_DB_TRANSACTION_NAMESPACE.run(async () => {
         let result: T;
         try {
-            const dataSource = getDataSource();
+            const dataSource = requireDataSource();
             if (dataSource.options.type === 'mongodb') {
                 result = await runInMongoTransaction((session: ClientSession, manager: MongoEntityManager) => {
                     markInTransaction();
@@ -62,7 +71,7 @@ export async function runInTransaction<T>(fn: () => T | Promise<T>, option: Tran
 }
 
 export async function runInMongoTransaction(fn: any, option: TransactionalOption = {}) {
-    const dataSource = getDataSource();
+    const dataSource = requireDataSource();
     const manager: MongoEntityManager = dataSource.manager as MongoEntityManager;
     const session = manager.mongoQueryRunner.databaseConnection.startSession();
 

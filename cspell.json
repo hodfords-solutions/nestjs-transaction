@@ -14,5 +14,14 @@
         "npmjs",
         "nodenext"
     ],
-    "ignorePaths": ["node_modules", "test", "*.spec.ts", "dist", "cspell.json"]
+    "ignorePaths": [
+        "node_modules",
+        "test",
+        "*.spec.ts",
+        "dist",
+        "cspell.json",
+        "package-lock.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml"
+    ]
 }
