@@ -66,7 +66,7 @@ export class PostService {
 
     async createPostWithQueryRunnerAndExternalDataSource(): Promise<void> {
         this.logger.log('Creating post with queryRunner and external data source');
-        const dataSource = getDataSource();
+        const dataSource = getDataSource()!;
         const dto = {
             title: 'Post with External Data Source',
             content: 'This is a post created using an external data source.'
@@ -89,7 +89,7 @@ export class PostService {
 
     async createPostWithQueryBuilderAndExternalDataSource(): Promise<void> {
         this.logger.log('Creating post with queryBuilder and external data source');
-        const dataSource = getDataSource();
+        const dataSource = getDataSource()!;
         const dto = {
             title: 'Post with Query Builder and External Data Source',
             content: 'This is a post created using query builder with an external data source.'
@@ -105,7 +105,7 @@ export class PostService {
             title: 'Post with Raw Query',
             content: 'This is a post created using query.'
         };
-        const dataSource = getDataSource();
+        const dataSource = getDataSource()!;
         await dataSource.query(`INSERT INTO posts (title, content) VALUES ($1, $2)`, [dto.title, dto.content]);
     }
 
